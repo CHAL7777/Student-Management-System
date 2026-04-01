@@ -1,31 +1,58 @@
 import Link from "next/link";
+import { revalidatePath } from "next/cache";
 
 import { BackButton } from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/Button";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { Table } from "@/components/ui/Table";
+import { FadeIn } from "@/components/ui/Motion";
 import { requireRole } from "@/lib/auth";
-import { listDepartments, listTeachers } from "@/lib/queries";
+import { deleteTeacher, listSubjects, listTeacherClassAssignments, listTeachers } from "@/lib/queries";
 
 export default async function TeachersPage() {
   await requireRole(["admin"]);
-  const [teachers, departments] = await Promise.all([listTeachers(), listDepartments()]);
+  const [teachers, subjects, classAssignments] = await Promise.all([
+    listTeachers(),
+    listSubjects(),
+    listTeacherClassAssignments()
+  ]);
 
-  const departmentMap = new Map(
-    departments.map((department) => [department.department_id, department.department_name])
-  );
+  const subjectMap = new Map(subjects.map((subject) => [subject.subject_id, subject.subject_name]));
+  const classMap = new Map<string, string[]>();
+
+  for (const assignment of classAssignments) {
+    const currentAssignments = classMap.get(assignment.teacher_id) ?? [];
+    if (assignment.class_name) {
+      currentAssignments.push(assignment.class_name);
+    }
+    classMap.set(assignment.teacher_id, currentAssignments);
+  }
+
+  async function deleteTeacherAction(formData: FormData) {
+    "use server";
+
+    await requireRole(["admin"]);
+    await deleteTeacher(String(formData.get("teacher_id") ?? ""));
+    revalidatePath("/teachers");
+    revalidatePath("/classes");
+    revalidatePath("/dashboard/admin");
+  }
 
   return (
     <section className="grid gap-6">
       <BackButton fallbackHref="/dashboard/admin" label="Back to registrar dashboard" />
-      <div className="flex flex-col gap-4 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900">Teachers</h2>
-          <p className="text-slate-500">Assign teachers to departments and keep staffing records current.</p>
-        </div>
-        <Link href="/teachers/add">
-          <Button variant="secondary">Add teacher</Button>
-        </Link>
-      </div>
+      <FadeIn>
+        <PageHeader
+          actions={
+            <Link href="/teachers/add">
+              <Button variant="secondary">Add teacher</Button>
+            </Link>
+          }
+          description="Assign teachers to subjects and keep staffing records current with a clean academic roster."
+          eyebrow="Teaching Staff"
+          title="Teachers"
+        />
+      </FadeIn>
 
       <Table
         data={teachers}
@@ -37,9 +64,29 @@ export default async function TeachersPage() {
           },
           { key: "name", header: "Teacher", render: (teacher) => <span className="font-semibold">{teacher.name}</span> },
           {
-            key: "department",
-            header: "Department",
-            render: (teacher) => departmentMap.get(teacher.department_id) ?? "Unknown"
+            key: "subject",
+            header: "Subject",
+            render: (teacher) => subjectMap.get(teacher.subject_id ?? "") ?? "Unassigned"
+          },
+          {
+            key: "classes",
+            header: "Classes",
+            render: (teacher) => {
+              const classes = classMap.get(teacher.teacher_id) ?? [];
+              return classes.length > 0 ? classes.join(", ") : "Unassigned";
+            }
+          },
+          {
+            key: "actions",
+            header: "Actions",
+            render: (teacher) => (
+              <form action={deleteTeacherAction}>
+                <input name="teacher_id" type="hidden" value={teacher.teacher_id} />
+                <Button size="sm" type="submit" variant="danger">
+                  Delete
+                </Button>
+              </form>
+            )
           }
         ]}
       />

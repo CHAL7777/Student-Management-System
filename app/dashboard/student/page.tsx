@@ -2,6 +2,9 @@ import Link from "next/link";
 
 import { ReportTable } from "@/components/reports/ReportTable";
 import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader } from "@/components/ui/Card";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { FadeIn } from "@/components/ui/Motion";
 import { getDashboardMetrics } from "@/lib/queries";
 import { requireRole } from "@/lib/auth";
 
@@ -11,25 +14,37 @@ export default async function StudentDashboardPage() {
 
   return (
     <section className="grid gap-6">
-      <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <h2 className="text-xl font-semibold text-slate-900">Student dashboard</h2>
-        <p className="mt-2 text-slate-600">
-          Review your academic performance, pass or fail status per subject, and the current
-          ranking generated directly from live marks.
-        </p>
-        <div className="mt-6">
-          <div className="flex flex-wrap gap-3">
-            <Link href="/reports">
-              <Button variant="secondary">Open my report</Button>
-            </Link>
-            <Link href="/dashboard/password">
-              <Button variant="ghost">Change password</Button>
-            </Link>
-          </div>
-        </div>
-      </div>
+      <FadeIn>
+        <PageHeader
+          actions={
+            <>
+              <Link href="/reports">
+                <Button variant="secondary">Open my report</Button>
+              </Link>
+              <Link href="/dashboard/password">
+                <Button variant="ghost">Change password</Button>
+              </Link>
+            </>
+          }
+          description="Review your performance, subject status, and current ranking generated from live academic marks."
+          eyebrow="Student Dashboard"
+          title="Your academic performance at a glance"
+        />
+      </FadeIn>
 
-      {metrics.report ? <ReportTable report={metrics.report} /> : null}
+      {metrics.report ? (
+        <ReportTable report={metrics.report} />
+      ) : (
+        <Card>
+          <CardHeader>
+            <h2 className="text-xl font-semibold text-slate-900">No report available yet</h2>
+            <p className="text-sm text-slate-500">
+              Your results will appear once marks are entered and published by your teacher.
+            </p>
+          </CardHeader>
+          <CardContent />
+        </Card>
+      )}
     </section>
   );
 }

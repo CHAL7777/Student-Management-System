@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { createRouteHandlerSupabase } from "@/lib/supabase";
-import type { Role, UserProfile } from "@/types";
+import type { UserProfile } from "@/types";
 import { ROLE_HOME } from "@/utils/roles";
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
-  const role = String(formData.get("role") ?? "").trim() as Role;
   const fullName = String(formData.get("full_name") ?? "").trim();
   const loginId = String(formData.get("login_id") ?? "").trim();
   const password = String(formData.get("password") ?? "");
-
-  if (!["admin", "teacher", "student"].includes(role)) {
-    return NextResponse.redirect(
-      new URL(`/login?error=${encodeURIComponent("Choose a valid role before signing in")}`, request.url)
-    );
-  }
 
   const response = NextResponse.redirect(new URL("/dashboard", request.url));
   const supabase = createRouteHandlerSupabase(request, response);
@@ -56,13 +49,10 @@ export async function POST(request: NextRequest) {
 
   const typedProfile = profile as UserProfile | null;
 
-  if (!typedProfile || typedProfile.role !== role) {
+  if (!typedProfile) {
     await supabase.auth.signOut();
     return NextResponse.redirect(
-      new URL(
-        `/login?error=${encodeURIComponent("Selected role does not match this account")}`,
-        request.url
-      )
+      new URL(`/login?error=${encodeURIComponent("Account profile not found")}`, request.url)
     );
   }
 

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { SubjectForm } from "@/components/forms/SubjectForm";
 import { BackButton } from "@/components/ui/BackButton";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { requireRole } from "@/lib/auth";
 import { createSubject } from "@/lib/queries";
 
@@ -25,10 +26,11 @@ export default async function AddSubjectPage() {
   return (
     <section className="grid gap-6">
       <BackButton fallbackHref="/subjects" label="Back to subjects" />
-      <div>
-        <h2 className="text-2xl font-semibold text-slate-900">Add subject</h2>
-        <p className="text-slate-500">Create curriculum subjects dynamically without hardcoding them.</p>
-      </div>
+      <PageHeader
+        description="Create curriculum subjects dynamically without hardcoding them into the app."
+        eyebrow="Curriculum"
+        title="Add subject"
+      />
       <SubjectForm action={createSubjectAction} />
     </section>
   );

@@ -1,8 +1,11 @@
 import { redirect } from "next/navigation";
 
+import { Alert } from "@/components/ui/Alert";
 import { BackButton } from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/Button";
+import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { requireRole } from "@/lib/auth";
 import { createServerSupabase } from "@/lib/supabase";
 import { ROLE_LABELS } from "@/utils/roles";
@@ -81,62 +84,61 @@ export default async function PasswordPage({ searchParams }: PasswordPageProps) 
     <section className="grid gap-6">
       <BackButton fallbackHref={`/dashboard/${profile.role}`} label="Back to dashboard" />
 
-      <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <h2 className="text-2xl font-semibold text-slate-900">Change password</h2>
-        <p className="mt-2 text-slate-500">
-          {ROLE_LABELS[profile.role]} accounts can replace the temporary password with a personal one
-          at any time.
-        </p>
-      </div>
+      <PageHeader
+        description={`${ROLE_LABELS[profile.role]} accounts can replace the temporary password with a personal one at any time.`}
+        eyebrow="Account Security"
+        title="Change password"
+      />
 
-      <form
-        action={changePasswordAction}
-        className="grid gap-4 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
-      >
-        <div className="grid gap-4 md:grid-cols-2">
-          <Input
-            label="Current password"
-            name="current_password"
-            type="password"
-            placeholder="Enter current password"
-            minLength={6}
-            required
-          />
-          <Input
-            label="New password"
-            name="new_password"
-            type="password"
-            placeholder="Enter new password"
-            minLength={6}
-            required
-          />
-        </div>
-
-        <Input
-          label="Confirm new password"
-          name="confirm_password"
-          type="password"
-          placeholder="Re-enter new password"
-          minLength={6}
-          required
-        />
-
-        {params.error ? (
-          <p className="rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-700">{params.error}</p>
-        ) : null}
-
-        {params.success ? (
-          <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-            {params.success}
+      <Card>
+        <CardHeader>
+          <h2 className="text-lg font-semibold text-slate-900">Update credentials</h2>
+          <p className="text-sm text-slate-500">
+            Choose a strong password you can remember and keep your account secure.
           </p>
-        ) : null}
+        </CardHeader>
+        <CardContent>
+          <form action={changePasswordAction} className="grid gap-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              <Input
+                label="Current password"
+                name="current_password"
+                type="password"
+                placeholder="Enter current password"
+                minLength={6}
+                required
+              />
+              <Input
+                label="New password"
+                name="new_password"
+                type="password"
+                placeholder="Enter new password"
+                minLength={6}
+                required
+              />
+            </div>
 
-        <div className="flex justify-end">
-          <Button type="submit" variant="secondary">
-            Update password
-          </Button>
-        </div>
-      </form>
+            <Input
+              label="Confirm new password"
+              name="confirm_password"
+              type="password"
+              placeholder="Re-enter new password"
+              minLength={6}
+              required
+            />
+
+            {params.error ? <Alert variant="danger">{params.error}</Alert> : null}
+
+            {params.success ? <Alert variant="success">{params.success}</Alert> : null}
+
+            <div className="flex justify-end">
+              <Button type="submit" variant="secondary">
+                Update password
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </section>
   );
 }

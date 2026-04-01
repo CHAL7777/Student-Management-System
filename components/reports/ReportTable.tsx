@@ -2,8 +2,30 @@ import type { StudentReportData } from "@/types";
 import { formatNumber } from "@/utils/helpers";
 
 export function ReportTable({ report }: { report: StudentReportData }) {
+  const overallStatus = report.summary.average >= 50 ? "Pass" : "Fail";
+
   return (
     <section className="grid gap-6">
+      <div className="rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-700 p-6 text-white shadow-xl">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-emerald-300">Student Result Sheet</p>
+            <h2 className="mt-3 text-2xl font-bold">{report.summary.student_name}</h2>
+            <p className="mt-2 text-sm text-slate-200">
+              {report.summary.grade} • {report.summary.academic_year} • {report.summary.semester} •{" "}
+              {report.summary.class_name ?? "Unassigned class"}
+            </p>
+          </div>
+          <span
+            className={`inline-flex w-fit items-center rounded-full px-4 py-2 text-sm font-bold uppercase tracking-wide ${
+              overallStatus === "Pass" ? "bg-emerald-500 text-white" : "bg-rose-500 text-white"
+            }`}
+          >
+            {overallStatus}
+          </span>
+        </div>
+      </div>
+
       <div className="grid gap-4 md:grid-cols-4">
         <MetricCard label="Total" value={formatNumber(report.summary.total)} />
         <MetricCard label="Average" value={formatNumber(report.summary.average)} />
@@ -11,16 +33,16 @@ export function ReportTable({ report }: { report: StudentReportData }) {
         <MetricCard label="Class" value={report.summary.class_name ?? "Unassigned"} />
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-200 px-5 py-4">
-          <h2 className="text-lg font-semibold text-slate-900">{report.summary.student_name}</h2>
+          <h3 className="text-lg font-semibold text-slate-900">Subject performance breakdown</h3>
           <p className="text-sm text-slate-500">
-            {report.summary.grade} | {report.summary.academic_year} | {report.summary.semester}
+            Each stored mark is shown dynamically with a clear pass or fail state.
           </p>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-slate-200 text-sm">
-            <thead className="bg-slate-50">
+            <thead className="bg-slate-100">
               <tr>
                 <th className="px-4 py-3 text-left font-semibold text-slate-600">Subject</th>
                 <th className="px-4 py-3 text-left font-semibold text-slate-600">Mark</th>
@@ -29,9 +51,15 @@ export function ReportTable({ report }: { report: StudentReportData }) {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {report.subjects.map((subject) => (
-                <tr key={subject.subject_id}>
-                  <td className="px-4 py-3 text-slate-700">{subject.subject_name}</td>
-                  <td className="px-4 py-3 text-slate-700">{formatNumber(subject.mark)}</td>
+                <tr key={subject.subject_id} className="odd:bg-white even:bg-slate-50/70">
+                  <td className="px-4 py-3 font-semibold text-slate-700">{subject.subject_name}</td>
+                  <td
+                    className={`px-4 py-3 font-semibold ${
+                      subject.status === "Pass" ? "text-slate-700" : "text-rose-600"
+                    }`}
+                  >
+                    {formatNumber(subject.mark)}
+                  </td>
                   <td className="px-4 py-3">
                     <span
                       className={

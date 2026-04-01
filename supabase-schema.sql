@@ -12,16 +12,17 @@ begin
 end
 $$;
 
-create table if not exists public.departments (
-  department_id uuid primary key default uuid_generate_v4(),
-  department_name text not null unique,
+create table if not exists public.subjects (
+  subject_id uuid primary key default uuid_generate_v4(),
+  subject_name text not null unique,
+  total_mark integer not null default 100 check (total_mark > 0),
   created_at timestamptz not null default timezone('utc', now())
 );
 
 create table if not exists public.teachers (
   teacher_id text primary key,
   name text not null,
-  department_id uuid not null references public.departments(department_id) on delete restrict,
+  subject_id uuid references public.subjects(subject_id) on delete set null,
   created_at timestamptz not null default timezone('utc', now())
 );
 
@@ -32,12 +33,30 @@ create table if not exists public.classes (
   created_at timestamptz not null default timezone('utc', now())
 );
 
-create table if not exists public.subjects (
-  subject_id uuid primary key default uuid_generate_v4(),
-  subject_name text not null unique,
-  total_mark integer not null default 100 check (total_mark > 0),
-  created_at timestamptz not null default timezone('utc', now())
+create table if not exists public.teacher_class_assignments (
+  teacher_id text not null references public.teachers(teacher_id) on delete cascade,
+  class_id uuid not null references public.classes(class_id) on delete cascade,
+  created_at timestamptz not null default timezone('utc', now()),
+  primary key (teacher_id, class_id)
 );
+
+alter table public.teachers
+add column if not exists subject_id uuid references public.subjects(subject_id) on delete set null;
+
+do $$
+begin
+  if exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'teachers'
+      and column_name = 'department_id'
+  ) then
+    alter table public.teachers
+    alter column department_id drop not null;
+  end if;
+end
+$$;
 
 create table if not exists public.students (
   student_id text primary key,
@@ -141,8 +160,8 @@ left join public.classes c on c.class_id = s.class_id
 left join public.marks m on m.student_id = s.student_id
 group by s.student_id, s.name, s.grade, s.academic_year, s.semester, c.class_name;
 
-alter table public.departments enable row level security;
 alter table public.teachers enable row level security;
+alter table public.teacher_class_assignments enable row level security;
 alter table public.classes enable row level security;
 alter table public.subjects enable row level security;
 alter table public.students enable row level security;
@@ -157,6 +176,32 @@ security definer
 set search_path = public
 as $$
   select role from public.profiles where id = auth.uid()
+$$;
+
+create or replace function public.current_teacher_subject_id()
+returns uuid
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select t.subject_id
+  from public.profiles p
+  join public.teachers t on t.teacher_id = p.teacher_id
+  where p.id = auth.uid()
+$$;
+
+create or replace function public.current_teacher_class_ids()
+returns uuid[]
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select coalesce(array_agg(tca.class_id), array[]::uuid[])
+  from public.profiles p
+  join public.teacher_class_assignments tca on tca.teacher_id = p.teacher_id
+  where p.id = auth.uid()
 $$;
 
 create or replace function public.resolve_login_email(p_full_name text, p_login_id text)
@@ -181,6 +226,8 @@ end;
 $$;
 
 grant execute on function public.resolve_login_email(text, text) to anon, authenticated;
+grant execute on function public.current_teacher_subject_id() to authenticated;
+grant execute on function public.current_teacher_class_ids() to authenticated;
 
 create or replace function public.build_hidden_login_email(p_role public.app_role, p_login_id text)
 returns text
@@ -316,11 +363,14 @@ begin
 end;
 $$;
 
+drop function if exists public.create_teacher_with_account(text, text, uuid, text);
+
 create or replace function public.create_teacher_with_account(
   p_teacher_id text,
   p_full_name text,
-  p_department_id uuid,
-  p_password text
+  p_subject_id uuid,
+  p_password text,
+  p_class_ids uuid[] default array[]::uuid[]
 )
 returns text
 language plpgsql
@@ -341,12 +391,16 @@ begin
   insert into public.teachers (
     teacher_id,
     name,
-    department_id
+    subject_id
   ) values (
     trim(p_teacher_id),
     trim(p_full_name),
-    p_department_id
+    p_subject_id
   );
+
+  insert into public.teacher_class_assignments (teacher_id, class_id)
+  select trim(p_teacher_id), class_id
+  from unnest(coalesce(p_class_ids, array[]::uuid[])) as class_id;
 
   insert into auth.users (
     instance_id,
@@ -427,7 +481,23 @@ end;
 $$;
 
 grant execute on function public.create_student_with_account(text, text, text, text, text, text, uuid, text) to authenticated;
-grant execute on function public.create_teacher_with_account(text, text, uuid, text) to authenticated;
+grant execute on function public.create_teacher_with_account(text, text, uuid, text, uuid[]) to authenticated;
+
+drop policy if exists "authenticated users can read own profile" on public.profiles;
+drop policy if exists "admins manage profiles" on public.profiles;
+drop policy if exists "admins manage teachers and teachers can read" on public.teachers;
+drop policy if exists "admins modify teachers" on public.teachers;
+drop policy if exists "admins manage teacher class assignments" on public.teacher_class_assignments;
+drop policy if exists "teachers read own class assignments" on public.teacher_class_assignments;
+drop policy if exists "authenticated users can read classes" on public.classes;
+drop policy if exists "admins manage classes" on public.classes;
+drop policy if exists "authenticated users can read subjects" on public.subjects;
+drop policy if exists "admins manage subjects" on public.subjects;
+drop policy if exists "admins and teachers read students" on public.students;
+drop policy if exists "admins manage students" on public.students;
+drop policy if exists "admins teachers and owner read marks" on public.marks;
+drop policy if exists "teachers manage marks" on public.marks;
+drop policy if exists "teachers update marks" on public.marks;
 
 create policy "authenticated users can read own profile"
 on public.profiles
@@ -445,13 +515,6 @@ to authenticated
 using (public.current_role() = 'admin')
 with check (public.current_role() = 'admin');
 
-create policy "admins manage departments"
-on public.departments
-for all
-to authenticated
-using (public.current_role() = 'admin')
-with check (public.current_role() = 'admin');
-
 create policy "admins manage teachers and teachers can read"
 on public.teachers
 for select
@@ -464,6 +527,24 @@ for all
 to authenticated
 using (public.current_role() = 'admin')
 with check (public.current_role() = 'admin');
+
+create policy "admins manage teacher class assignments"
+on public.teacher_class_assignments
+for all
+to authenticated
+using (public.current_role() = 'admin')
+with check (public.current_role() = 'admin');
+
+create policy "teachers read own class assignments"
+on public.teacher_class_assignments
+for select
+to authenticated
+using (
+  public.current_role() = 'teacher'
+  and teacher_id = (
+    select teacher_id from public.profiles where id = auth.uid()
+  )
+);
 
 create policy "authenticated users can read classes"
 on public.classes
@@ -496,7 +577,11 @@ on public.students
 for select
 to authenticated
 using (
-  public.current_role() in ('admin', 'teacher')
+  public.current_role() = 'admin'
+  or (
+    public.current_role() = 'teacher'
+    and class_id = any(public.current_teacher_class_ids())
+  )
   or student_id = (
     select student_id from public.profiles where id = auth.uid()
   )
@@ -514,7 +599,17 @@ on public.marks
 for select
 to authenticated
 using (
-  public.current_role() in ('admin', 'teacher')
+  public.current_role() = 'admin'
+  or (
+    public.current_role() = 'teacher'
+    and subject_id = public.current_teacher_subject_id()
+    and exists (
+      select 1
+      from public.students s
+      where s.student_id = public.marks.student_id
+        and s.class_id = any(public.current_teacher_class_ids())
+    )
+  )
   or student_id = (
     select student_id from public.profiles where id = auth.uid()
   )
@@ -524,11 +619,38 @@ create policy "teachers manage marks"
 on public.marks
 for insert
 to authenticated
-with check (public.current_role() = 'teacher');
+with check (
+  public.current_role() = 'teacher'
+  and subject_id = public.current_teacher_subject_id()
+  and exists (
+    select 1
+    from public.students s
+    where s.student_id = public.marks.student_id
+      and s.class_id = any(public.current_teacher_class_ids())
+  )
+);
 
 create policy "teachers update marks"
 on public.marks
 for update
 to authenticated
-using (public.current_role() = 'teacher')
-with check (public.current_role() = 'teacher');
+using (
+  public.current_role() = 'teacher'
+  and subject_id = public.current_teacher_subject_id()
+  and exists (
+    select 1
+    from public.students s
+    where s.student_id = public.marks.student_id
+      and s.class_id = any(public.current_teacher_class_ids())
+  )
+)
+with check (
+  public.current_role() = 'teacher'
+  and subject_id = public.current_teacher_subject_id()
+  and exists (
+    select 1
+    from public.students s
+    where s.student_id = public.marks.student_id
+      and s.class_id = any(public.current_teacher_class_ids())
+  )
+);

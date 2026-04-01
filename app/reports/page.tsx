@@ -1,11 +1,14 @@
+import { HomeroomReportTable } from "@/components/reports/HomeroomReportTable";
 import Link from "next/link";
 
 import { ReportTable } from "@/components/reports/ReportTable";
 import { BackButton } from "@/components/ui/BackButton";
-import { Table } from "@/components/ui/Table";
+import { Alert } from "@/components/ui/Alert";
+import { Card, CardContent, CardHeader } from "@/components/ui/Card";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { FadeIn } from "@/components/ui/Motion";
 import { requireRole } from "@/lib/auth";
-import { getStudentReport, listVisibleReports } from "@/lib/queries";
-import { formatNumber } from "@/utils/helpers";
+import { getHomeroomReport, getStudentReport, getTeacherAssignedClasses, getTeacherAssignedSubject, listVisibleReports } from "@/lib/queries";
 
 interface ReportsPageProps {
   searchParams?: Promise<{
@@ -20,49 +23,78 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
   ]);
   const params = resolvedSearchParams as { studentId?: string };
 
-  const reports = await listVisibleReports(profile);
+  const [reports, homeroomReport, assignedSubject, assignedClasses] = await Promise.all([
+    listVisibleReports(profile),
+    profile.role !== "student" ? getHomeroomReport(profile) : Promise.resolve(null),
+    profile.role === "teacher" ? getTeacherAssignedSubject(profile) : Promise.resolve(null),
+    profile.role === "teacher" ? getTeacherAssignedClasses(profile) : Promise.resolve([])
+  ]);
   const selectedId =
-    profile.role === "student" ? profile.student_id : params.studentId ?? reports[0]?.student_id;
+    (profile.role === "student" ? profile.student_id : params.studentId ?? reports[0]?.student_id) ??
+    undefined;
 
-  const selectedReport = selectedId ? await getStudentReport(selectedId) : null;
+  const selectedReport = selectedId ? await getStudentReport(selectedId, profile) : null;
 
   return (
     <section className="grid gap-6">
       <BackButton fallbackHref="/dashboard" label="Back to dashboard" />
-      <div>
-        <h2 className="text-2xl font-semibold text-slate-900">Academic reports</h2>
-        <p className="text-slate-500">
-          Totals, averages, rank, and pass or fail status are calculated dynamically from stored
-          subject marks.
-        </p>
-      </div>
-
-      {profile.role !== "student" ? (
-        <Table
-          data={reports}
-          columns={[
-            {
-              key: "student",
-              header: "Student",
-              render: (report) => (
-                <Link className="font-semibold text-emerald-700" href={`/reports?studentId=${report.student_id}`}>
-                  {report.student_name}
-                </Link>
-              )
-            },
-            { key: "total", header: "Total", render: (report) => formatNumber(report.total) },
-            { key: "average", header: "Average", render: (report) => formatNumber(report.average) },
-            { key: "rank", header: "Rank", render: (report) => report.rank }
-          ]}
+      <FadeIn>
+        <PageHeader
+          description={
+            profile.role === "teacher"
+              ? "Teacher reports are limited to your assigned subject and the students inside your assigned classes."
+              : "Totals, averages, rank, and pass or fail status are calculated dynamically from stored subject marks."
+          }
+          eyebrow="Academic Reporting"
+          title="Reports"
         />
+      </FadeIn>
+
+      {profile.role === "teacher" ? (
+        <Alert title="Teacher report scope" variant={assignedSubject && assignedClasses.length > 0 ? "info" : "danger"}>
+          {assignedSubject && assignedClasses.length > 0 ? (
+            <>
+              You are viewing <strong>{assignedSubject.subject_name}</strong> for{" "}
+              <strong>{assignedClasses.map((classRoom) => classRoom.class_name).join(", ")}</strong>.
+            </>
+          ) : (
+            "This teacher account needs both a subject and at least one class assignment before reports can be shown."
+          )}
+        </Alert>
+      ) : null}
+
+      {profile.role !== "student" && homeroomReport ? (
+        <HomeroomReportTable data={homeroomReport} selectedStudentId={selectedId} />
       ) : null}
 
       {selectedReport ? (
-        <ReportTable report={selectedReport} />
-      ) : (
-        <div className="rounded-2xl bg-white p-6 text-slate-500 shadow-sm ring-1 ring-slate-200">
-          No reports are available yet. Add students, subjects, and marks first.
+        <div className="grid gap-4">
+          {profile.role !== "student" ? (
+            <Card>
+              <CardHeader>
+                <h3 className="text-lg font-semibold text-slate-900">Focused student view</h3>
+                <p className="text-sm text-slate-500">
+                  Detailed breakdown for{" "}
+                  <Link className="font-semibold text-emerald-700" href={`/students/${selectedReport.summary.student_id}`}>
+                    {selectedReport.summary.student_name}
+                  </Link>
+                  .
+                </p>
+              </CardHeader>
+            </Card>
+          ) : null}
+          <ReportTable report={selectedReport} />
         </div>
+      ) : (
+        <Card>
+          <CardHeader>
+            <h3 className="text-lg font-semibold text-slate-900">No reports available yet</h3>
+            <p className="text-sm text-slate-500">
+              Add students, subjects, and marks first to generate academic reporting data.
+            </p>
+          </CardHeader>
+          <CardContent />
+        </Card>
       )}
     </section>
   );

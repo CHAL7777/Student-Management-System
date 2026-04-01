@@ -1,28 +1,46 @@
 import Link from "next/link";
+import { revalidatePath } from "next/cache";
 
 import { BackButton } from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/Button";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { Table } from "@/components/ui/Table";
+import { FadeIn } from "@/components/ui/Motion";
 import { requireRole } from "@/lib/auth";
-import { listClasses, listTeachers } from "@/lib/queries";
+import { deleteClass, listClasses, listTeachers } from "@/lib/queries";
 
 export default async function ClassesPage() {
   await requireRole(["admin"]);
   const [classes, teachers] = await Promise.all([listClasses(), listTeachers()]);
   const teacherMap = new Map(teachers.map((teacher) => [teacher.teacher_id, teacher.name]));
 
+  async function deleteClassAction(formData: FormData) {
+    "use server";
+
+    await requireRole(["admin"]);
+    await deleteClass(String(formData.get("class_id") ?? ""));
+    revalidatePath("/classes");
+    revalidatePath("/students");
+    revalidatePath("/teachers");
+    revalidatePath("/reports");
+    revalidatePath("/dashboard/admin");
+  }
+
   return (
     <section className="grid gap-6">
       <BackButton fallbackHref="/dashboard/admin" label="Back to registrar dashboard" />
-      <div className="flex flex-col gap-4 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900">Classes</h2>
-          <p className="text-slate-500">Maintain class groups and assign homeroom teachers.</p>
-        </div>
-        <Link href="/classes/add">
-          <Button variant="secondary">Add class</Button>
-        </Link>
-      </div>
+      <FadeIn>
+        <PageHeader
+          actions={
+            <Link href="/classes/add">
+              <Button variant="secondary">Add class</Button>
+            </Link>
+          }
+          description="Maintain class groups and assign homeroom teachers with a clear academic structure."
+          eyebrow="Class Structure"
+          title="Classes"
+        />
+      </FadeIn>
 
       <Table
         data={classes}
@@ -36,6 +54,18 @@ export default async function ClassesPage() {
             key: "homeroom",
             header: "Homeroom teacher",
             render: (classRoom) => teacherMap.get(classRoom.homeroom_teacher_id ?? "") ?? "Unassigned"
+          },
+          {
+            key: "actions",
+            header: "Actions",
+            render: (classRoom) => (
+              <form action={deleteClassAction}>
+                <input name="class_id" type="hidden" value={classRoom.class_id} />
+                <Button size="sm" type="submit" variant="danger">
+                  Delete
+                </Button>
+              </form>
+            )
           }
         ]}
       />

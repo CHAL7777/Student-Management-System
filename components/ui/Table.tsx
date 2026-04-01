@@ -17,15 +17,18 @@ interface TableProps<T> {
 
 export function Table<T>({ columns, data, emptyState = "No records found." }: TableProps<T>) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-white/90 shadow-[var(--shadow-card)] backdrop-blur">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-          <thead className="bg-slate-50">
+        <table className="min-w-full divide-y divide-slate-200/80 text-left text-sm">
+          <thead className="bg-slate-100/80">
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className={cn("px-4 py-3 font-semibold text-slate-600", column.className)}
+                  className={cn(
+                    "px-5 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500",
+                    column.className
+                  )}
                   scope="col"
                 >
                   {column.header}
@@ -33,18 +36,18 @@ export function Table<T>({ columns, data, emptyState = "No records found." }: Ta
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100/90">
             {data.length === 0 ? (
               <tr>
-                <td className="px-4 py-8 text-center text-slate-500" colSpan={columns.length}>
+                <td className="px-5 py-12 text-center text-sm text-slate-500" colSpan={columns.length}>
                   {emptyState}
                 </td>
               </tr>
             ) : (
               data.map((row, rowIndex) => (
-                <tr key={rowIndex} className="hover:bg-slate-50/80">
+                <tr key={rowIndex} className="odd:bg-white even:bg-slate-50/60 transition hover:bg-emerald-50/40">
                   {columns.map((column) => (
-                    <td key={column.key} className="px-4 py-3 align-top text-slate-700">
+                    <td key={column.key} className="px-5 py-4 align-top text-slate-700">
                       {column.render(row)}
                     </td>
                   ))}
