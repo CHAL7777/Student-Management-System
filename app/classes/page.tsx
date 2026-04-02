@@ -7,7 +7,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Table } from "@/components/ui/Table";
 import { FadeIn } from "@/components/ui/Motion";
 import { requireRole } from "@/lib/auth";
-import { deleteClass, listClasses, listTeachers } from "@/lib/queries";
+import { deleteClass, listClasses, listTeachers, updateClassHomeroomTeacher } from "@/lib/queries";
 
 export default async function ClassesPage() {
   await requireRole(["admin"]);
@@ -22,6 +22,20 @@ export default async function ClassesPage() {
     revalidatePath("/classes");
     revalidatePath("/students");
     revalidatePath("/teachers");
+    revalidatePath("/reports");
+    revalidatePath("/dashboard/admin");
+  }
+
+  async function updateHomeroomTeacherAction(formData: FormData) {
+    "use server";
+
+    await requireRole(["admin"]);
+    await updateClassHomeroomTeacher(
+      String(formData.get("class_id") ?? ""),
+      String(formData.get("homeroom_teacher_id") ?? "") || null
+    );
+    revalidatePath("/classes");
+    revalidatePath("/students");
     revalidatePath("/reports");
     revalidatePath("/dashboard/admin");
   }
@@ -54,6 +68,30 @@ export default async function ClassesPage() {
             key: "homeroom",
             header: "Homeroom teacher",
             render: (classRoom) => teacherMap.get(classRoom.homeroom_teacher_id ?? "") ?? "Unassigned"
+          },
+          {
+            key: "assign",
+            header: "Assign teacher",
+            render: (classRoom) => (
+              <form action={updateHomeroomTeacherAction} className="flex flex-wrap items-center gap-2">
+                <input name="class_id" type="hidden" value={classRoom.class_id} />
+                <select
+                  className="min-w-44 rounded-2xl border border-slate-200/80 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                  defaultValue={classRoom.homeroom_teacher_id ?? ""}
+                  name="homeroom_teacher_id"
+                >
+                  <option value="">Unassigned</option>
+                  {teachers.map((teacher) => (
+                    <option key={teacher.teacher_id} value={teacher.teacher_id}>
+                      {teacher.name}
+                    </option>
+                  ))}
+                </select>
+                <Button size="sm" type="submit" variant="ghost">
+                  Save
+                </Button>
+              </form>
+            )
           },
           {
             key: "actions",

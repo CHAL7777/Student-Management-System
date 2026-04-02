@@ -279,6 +279,22 @@ export async function createClass(values: ClassFormValues) {
   ensureNoError(error, "Failed to create class");
 }
 
+export async function updateClassHomeroomTeacher(classId: string, homeroomTeacherId: string | null) {
+  if (!classId.trim()) {
+    throw new Error("Class ID is required");
+  }
+
+  const supabase = await createServerSupabase();
+  const { error } = await supabase
+    .from("classes")
+    .update({
+      homeroom_teacher_id: homeroomTeacherId?.trim() ? homeroomTeacherId.trim() : null
+    })
+    .eq("class_id", classId.trim());
+
+  ensureNoError(error, "Failed to update homeroom teacher");
+}
+
 export async function deleteClass(classId: string) {
   const supabase = await createServerSupabase();
   const { error } = await supabase.from("classes").delete().eq("class_id", classId);
