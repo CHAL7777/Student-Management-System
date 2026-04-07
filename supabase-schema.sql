@@ -314,14 +314,52 @@ set search_path = public, auth
 as $$
 declare
   v_user_id uuid;
+  v_login_id text;
   v_hidden_email text;
+  v_conflicting_login_id text;
 begin
   if public.current_role() <> 'admin' then
     raise exception 'Only admins can create student accounts';
   end if;
 
-  v_hidden_email := public.build_hidden_login_email('student', p_student_id);
+  v_login_id := trim(p_student_id);
+  v_hidden_email := public.build_hidden_login_email('student', v_login_id);
   v_user_id := gen_random_uuid();
+
+  if v_login_id = '' then
+    raise exception 'Student ID is required';
+  end if;
+
+  if exists (
+    select 1
+    from public.students
+    where lower(student_id) = lower(v_login_id)
+  ) then
+    raise exception 'A student with this ID already exists';
+  end if;
+
+  if exists (
+    select 1
+    from public.profiles
+    where lower(coalesce(login_id, '')) = lower(v_login_id)
+  ) then
+    raise exception 'An account with this login ID already exists';
+  end if;
+
+  select coalesce(p.login_id, u.email)
+  into v_conflicting_login_id
+  from auth.users u
+  left join public.profiles p on p.id = u.id
+  where u.email = v_hidden_email
+  limit 1;
+
+  if v_conflicting_login_id is not null then
+    if lower(v_conflicting_login_id) = lower(v_login_id) then
+      raise exception 'An account with this ID already exists';
+    end if;
+
+    raise exception 'This student ID conflicts with existing account ID "%". Use a different ID.', v_conflicting_login_id;
+  end if;
 
   insert into public.students (
     student_id,
@@ -332,7 +370,7 @@ begin
     semester,
     class_id
   ) values (
-    trim(p_student_id),
+    v_login_id,
     trim(p_full_name),
     p_gender,
     trim(p_grade),
@@ -368,7 +406,7 @@ begin
     extensions.crypt(p_password, extensions.gen_salt('bf')),
     timezone('utc', now()),
     jsonb_build_object('provider', 'email', 'providers', array['email']),
-    jsonb_build_object('full_name', trim(p_full_name), 'login_id', trim(p_student_id)),
+    jsonb_build_object('full_name', trim(p_full_name), 'login_id', v_login_id),
     '',
     '',
     '',
@@ -409,13 +447,13 @@ begin
   ) values (
     v_user_id,
     trim(p_full_name),
-    trim(p_student_id),
+    v_login_id,
     'student',
-    trim(p_student_id),
+    v_login_id,
     null
   );
 
-  return trim(p_student_id);
+  return v_login_id;
 end;
 $$;
 
@@ -435,27 +473,65 @@ set search_path = public, auth
 as $$
 declare
   v_user_id uuid;
+  v_login_id text;
   v_hidden_email text;
+  v_conflicting_login_id text;
 begin
   if public.current_role() <> 'admin' then
     raise exception 'Only admins can create teacher accounts';
   end if;
 
-  v_hidden_email := public.build_hidden_login_email('teacher', p_teacher_id);
+  v_login_id := trim(p_teacher_id);
+  v_hidden_email := public.build_hidden_login_email('teacher', v_login_id);
   v_user_id := gen_random_uuid();
+
+  if v_login_id = '' then
+    raise exception 'Teacher ID is required';
+  end if;
+
+  if exists (
+    select 1
+    from public.teachers
+    where lower(teacher_id) = lower(v_login_id)
+  ) then
+    raise exception 'A teacher with this ID already exists';
+  end if;
+
+  if exists (
+    select 1
+    from public.profiles
+    where lower(coalesce(login_id, '')) = lower(v_login_id)
+  ) then
+    raise exception 'An account with this login ID already exists';
+  end if;
+
+  select coalesce(p.login_id, u.email)
+  into v_conflicting_login_id
+  from auth.users u
+  left join public.profiles p on p.id = u.id
+  where u.email = v_hidden_email
+  limit 1;
+
+  if v_conflicting_login_id is not null then
+    if lower(v_conflicting_login_id) = lower(v_login_id) then
+      raise exception 'An account with this ID already exists';
+    end if;
+
+    raise exception 'This teacher ID conflicts with existing account ID "%". Use a different ID.', v_conflicting_login_id;
+  end if;
 
   insert into public.teachers (
     teacher_id,
     name,
     subject_id
   ) values (
-    trim(p_teacher_id),
+    v_login_id,
     trim(p_full_name),
     p_subject_id
   );
 
   insert into public.teacher_class_assignments (teacher_id, class_id)
-  select trim(p_teacher_id), class_id
+  select v_login_id, class_id
   from unnest(coalesce(p_class_ids, array[]::uuid[])) as class_id;
 
   insert into auth.users (
@@ -485,7 +561,7 @@ begin
     extensions.crypt(p_password, extensions.gen_salt('bf')),
     timezone('utc', now()),
     jsonb_build_object('provider', 'email', 'providers', array['email']),
-    jsonb_build_object('full_name', trim(p_full_name), 'login_id', trim(p_teacher_id)),
+    jsonb_build_object('full_name', trim(p_full_name), 'login_id', v_login_id),
     '',
     '',
     '',
@@ -526,13 +602,13 @@ begin
   ) values (
     v_user_id,
     trim(p_full_name),
-    trim(p_teacher_id),
+    v_login_id,
     'teacher',
     null,
-    trim(p_teacher_id)
+    v_login_id
   );
 
-  return trim(p_teacher_id);
+  return v_login_id;
 end;
 $$;
 

@@ -325,6 +325,10 @@ export async function createStudent(values: StudentFormValues) {
     p_password: values.temporary_password
   });
 
+  if (error?.code === "23505" || error?.message.toLowerCase().includes("users_email_partial_key")) {
+    throw new Error("This student ID conflicts with an existing account. Use a different ID.");
+  }
+
   ensureNoError(error, "Failed to create student");
 }
 
@@ -352,6 +356,10 @@ export async function createTeacher(values: TeacherFormValues) {
     p_password: values.temporary_password,
     p_class_ids: values.class_ids.map((classId) => classId.trim()).filter(Boolean)
   });
+
+  if (error?.code === "23505" || error?.message.toLowerCase().includes("users_email_partial_key")) {
+    throw new Error("This teacher ID conflicts with an existing account. Use a different ID.");
+  }
 
   ensureNoError(error, "Failed to create teacher");
 }
