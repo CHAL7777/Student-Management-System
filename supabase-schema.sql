@@ -241,6 +241,62 @@ as $$
   )
 $$;
 
+create or replace function public.change_own_password(
+  p_current_password text,
+  p_new_password text
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+declare
+  v_user_id uuid;
+  v_encrypted_password text;
+begin
+  v_user_id := auth.uid();
+
+  if v_user_id is null then
+    raise exception 'Not authenticated';
+  end if;
+
+  if coalesce(length(p_current_password), 0) = 0 then
+    raise exception 'Current password is required';
+  end if;
+
+  if coalesce(length(p_new_password), 0) < 6 then
+    raise exception 'New password must be at least 6 characters';
+  end if;
+
+  select encrypted_password
+  into v_encrypted_password
+  from auth.users
+  where id = v_user_id
+  for update;
+
+  if v_encrypted_password is null then
+    raise exception 'Account not found';
+  end if;
+
+  if v_encrypted_password <> extensions.crypt(p_current_password, v_encrypted_password) then
+    raise exception 'Current password is incorrect';
+  end if;
+
+  if v_encrypted_password = extensions.crypt(p_new_password, v_encrypted_password) then
+    raise exception 'Choose a different new password';
+  end if;
+
+  update auth.users
+  set encrypted_password = extensions.crypt(p_new_password, extensions.gen_salt('bf')),
+      updated_at = timezone('utc', now())
+  where id = v_user_id;
+
+  return true;
+end;
+$$;
+
+grant execute on function public.change_own_password(text, text) to authenticated;
+
 create or replace function public.create_student_with_account(
   p_student_id text,
   p_full_name text,

@@ -36,6 +36,16 @@ async function getCount(table: string) {
   return count ?? 0;
 }
 
+export async function changeOwnPassword(currentPassword: string, newPassword: string) {
+  const supabase = await createServerSupabase();
+  const { error } = await supabase.rpc("change_own_password", {
+    p_current_password: currentPassword,
+    p_new_password: newPassword
+  });
+
+  ensureNoError(error, "Failed to update password");
+}
+
 export async function listStudents(profile?: UserProfile) {
   const supabase = await createServerSupabase();
   let query = supabase

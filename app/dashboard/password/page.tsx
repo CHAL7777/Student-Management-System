@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { requireRole } from "@/lib/auth";
-import { createServerSupabase } from "@/lib/supabase";
+import { changeOwnPassword } from "@/lib/queries";
 import { ROLE_LABELS } from "@/utils/roles";
 
 interface PasswordPageProps {
@@ -50,31 +50,11 @@ export default async function PasswordPage({ searchParams }: PasswordPageProps) 
       redirect("/dashboard/password?error=Choose%20a%20different%20new%20password");
     }
 
-    const supabase = await createServerSupabase();
-    const {
-      data: { user },
-      error: userError
-    } = await supabase.auth.getUser();
-
-    if (userError || !user?.email) {
-      redirect("/login");
-    }
-
-    const { error: verifyError } = await supabase.auth.signInWithPassword({
-      email: user.email,
-      password: currentPassword
-    });
-
-    if (verifyError) {
-      redirect("/dashboard/password?error=Current%20password%20is%20incorrect");
-    }
-
-    const { error: updateError } = await supabase.auth.updateUser({
-      password: newPassword
-    });
-
-    if (updateError) {
-      redirect(`/dashboard/password?error=${encodeURIComponent(updateError.message)}`);
+    try {
+      await changeOwnPassword(currentPassword, newPassword);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to update password";
+      redirect(`/dashboard/password?error=${encodeURIComponent(message)}`);
     }
 
     redirect("/dashboard/password?success=Password%20updated%20successfully");
