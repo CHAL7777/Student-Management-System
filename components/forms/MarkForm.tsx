@@ -9,7 +9,10 @@ interface MarkFormProps {
 
 export function MarkForm({ action, studentOptions, subjectOptions }: MarkFormProps) {
   return (
-    <form action={action} className="grid gap-4 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <form
+      action={action}
+      className="grid gap-5 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[var(--shadow-card)]"
+    >
       <div className="grid gap-4 md:grid-cols-3">
         <Select
           label="Student"
@@ -28,8 +31,8 @@ export function MarkForm({ action, studentOptions, subjectOptions }: MarkFormPro
         <Input label="Mark" name="mark" type="number" min="0" max="100" step="0.01" required />
       </div>
 
-      <div className="flex justify-end">
-        <Button type="submit" variant="secondary">
+      <div className="flex justify-end pt-2">
+        <Button type="submit" variant="primary">
           Save mark
         </Button>
       </div>

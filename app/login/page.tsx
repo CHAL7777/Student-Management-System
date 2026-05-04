@@ -28,7 +28,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <main className="grid min-h-screen lg:grid-cols-[1.1fr_0.9fr]">
-      <section className="relative hidden overflow-hidden bg-slate-900 lg:block">
+      <section className="relative hidden overflow-hidden bg-[#0f172a] lg:block">
         <Image
           src="/images/login-hero.jpeg"
           alt="Students during mentorship session"
@@ -37,13 +37,13 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           className="object-cover opacity-70"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900/80 to-emerald-700/40" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#020617] via-[#0f172a]/84 to-[#2563eb]/40" />
         <div className="relative z-10 flex h-full flex-col justify-between p-12 text-white">
           <div className="max-w-xl">
-            <Badge className="bg-white/10 text-emerald-200" variant="neutral">
+            <Badge className="bg-white/10 text-sky-100 ring-1 ring-white/10" variant="neutral">
               Secure academic access
             </Badge>
-            <h1 className="mt-6 text-4xl font-semibold leading-tight">
+            <h1 className="heading-display mt-6 text-5xl leading-[1.02] text-white">
               Sign in to manage records, enter marks, and publish elegant result reports.
             </h1>
             <p className="mt-4 text-base leading-7 text-slate-200">
@@ -72,9 +72,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       <section className="flex items-center justify-center px-4 py-10 sm:px-6">
         <FadeIn className="w-full max-w-xl">
           <Card className="overflow-hidden">
-            <CardHeader className="border-b border-slate-200/80 bg-white/70">
+            <CardHeader className="border-b border-slate-200/70 bg-white/60">
               <Badge variant="success">Welcome back</Badge>
-              <h2 className="text-3xl font-semibold text-slate-950">Login to your dashboard</h2>
+              <h2 className="heading-display text-[2.4rem] text-slate-950">Login to your dashboard</h2>
               <p className="text-sm leading-6 text-slate-500 md:text-base">
                 Sign in with your full name, institution ID, and password.
               </p>
@@ -86,7 +86,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                 <Input label="ID" name="login_id" placeholder="ADM-001 / TCH-101 / STD-001" required />
                 <Input label="Password" name="password" type="password" placeholder="••••••••" required />
                 {params.error ? <Alert variant="danger">{params.error}</Alert> : null}
-                <Button fullWidth size="lg" type="submit" variant="secondary">
+                <Button fullWidth size="lg" type="submit" variant="primary">
                   Sign in
                 </Button>
               </form>

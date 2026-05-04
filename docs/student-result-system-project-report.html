@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Academic Record Management System - Project Report</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 17mm 16mm 18mm;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Times New Roman", Times, serif;
+        font-size: 11.5pt;
+        line-height: 1.48;
+        color: #111;
+        background: #fff;
+      }
+
+      main {
+        max-width: 210mm;
+        margin: 0 auto;
+        padding: 10mm 8mm 14mm;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin: 0 0 8px;
+        font-weight: 700;
+      }
+
+      h1 {
+        font-size: 24pt;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 16pt;
+        margin-top: 0;
+        border-bottom: 1px solid #222;
+        padding-bottom: 4px;
+      }
+
+      h3 {
+        font-size: 13pt;
+        margin-top: 14px;
+      }
+
+      h4 {
+        font-size: 12pt;
+        margin-top: 12px;
+      }
+
+      p {
+        margin: 0 0 8px;
+        text-align: justify;
+      }
+
+      ul,
+      ol {
+        margin: 0 0 12px 22px;
+      }
+
+      li {
+        margin-bottom: 3px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0 14px;
+      }
+
+      th,
+      td {
+        border: 1px solid #333;
+        padding: 7px 8px;
+        vertical-align: top;
+      }
+
+      th {
+        background: #f0f0f0;
+        text-align: left;
+      }
+
+      .title-page {
+        min-height: 250mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .title-box {
+        border: 2px solid #111;
+        padding: 12px 16px;
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      .meta {
+        width: 100%;
+      }
+
+      .page-break {
+        page-break-before: always;
+        break-before: page;
+      }
+
+      .note,
+      .code,
+      .diagram-note {
+        border: 1px solid #444;
+        padding: 10px 12px;
+        margin: 10px 0 14px;
+        background: #fafafa;
+      }
+
+      .code {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 9.8pt;
+        white-space: pre-wrap;
+      }
+
+      .toc li {
+        margin-bottom: 7px;
+      }
+
+      .small {
+        font-size: 10.5pt;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .figure-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .figure {
+        border: 1px solid #444;
+        padding: 8px;
+      }
+
+      .figure img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid #bbb;
+      }
+
+      .caption {
+        margin-top: 8px;
+        font-size: 10.5pt;
+      }
+
+      .placeholder {
+        min-height: 190px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border: 1px dashed #666;
+        background: #f7f7f7;
+        padding: 14px;
+      }
+
+      .svg-wrap {
+        border: 1px solid #444;
+        padding: 10px;
+        margin: 10px 0 14px;
+      }
+
+      svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .section-label {
+        font-size: 10.5pt;
+        margin-bottom: 6px;
+      }
+
+      .mono {
+        font-family: "Courier New", Courier, monospace;
+      }
+
+      .cover-image {
+        display: block;
+        width: 100%;
+        max-width: 136mm;
+        margin: 0 auto 2px;
+      }
+
+      .cover-heading {
+        font-size: 15pt;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        margin-bottom: 2px;
+        text-transform: uppercase;
+      }
+
+      .cover-subheading {
+        font-size: 12pt;
+        font-weight: 700;
+        margin-bottom: 1px;
+        text-transform: uppercase;
+      }
+
+      .cover-course {
+        font-size: 11pt;
+        margin-top: 4px;
+      }
+
+      .members-box {
+        border: 1px solid #333;
+        padding: 8px 10px;
+      }
+
+      .members-box h3 {
+        margin-top: 0;
+        text-align: center;
+        margin-bottom: 6px;
+      }
+
+      .members-box table {
+        margin: 0;
+        font-size: 10.5pt;
+      }
+
+      .members-box th,
+      .members-box td,
+      .title-page .meta th,
+      .title-page .meta td {
+        padding: 5px 6px;
+      }
+
+      .title-page .meta {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="title-page">
+        <div class="center">
+          <img class="cover-image" src="../public/images/img/haramaya.png" alt="Haramaya University banner" />
+          <p class="cover-heading">Haramaya University</p>
+          <p class="cover-subheading">College of Computing and Informatics</p>
+          <p class="cover-subheading">Department of Software Engineering</p>
+          <p class="cover-course">Course: Advanced Database</p>
+        </div>
+
+        <div class="title-box">
+          <h1>Student Academic Record Management System</h1>
+          <p class="center">
+            Database Design, SQL Implementation, and Web Application Documentation
+          </p>
+        </div>
+
+        <table class="meta">
+          <tr>
+            <th style="width: 28%;">University</th>
+            <td>Haramaya University</td>
+          </tr>
+          <tr>
+            <th>College</th>
+            <td>College of Computing and Informatics</td>
+          </tr>
+          <tr>
+            <th>Department</th>
+            <td>Department of Software Engineering</td>
+          </tr>
+          <tr>
+            <th>Course</th>
+            <td>Advanced Database</td>
+          </tr>
+          <tr>
+            <th>Date</th>
+            <td>April 15, 2026</td>
+          </tr>
+        </table>
+
+        <div class="members-box">
+          <h3>Group Members</h3>
+          <table>
+            <tr>
+              <th style="width: 70%;">Name</th>
+              <th>ID</th>
+            </tr>
+            <tr>
+              <td>Chala Gobena</td>
+              <td>0964/16</td>
+            </tr>
+            <tr>
+              <td>Amenti Liben</td>
+              <td>0686/16</td>
+            </tr>
+            <tr>
+              <td>Boka Jiregna</td>
+              <td>0931/16</td>
+            </tr>
+            <tr>
+              <td>Damoze Motuma</td>
+              <td>0995/16</td>
+            </tr>
+            <tr>
+              <td>Jalane Feyisa</td>
+              <td>1663/16</td>
+            </tr>
+            <tr>
+              <td>Dawit Marsha</td>
+              <td>1026/16</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="note">
+          This report presents the analysis, design, implementation, and reporting features of the
+          Student Academic Record Management System developed for the Advanced Database course.
+        </div>
+      </section>
+
+      <section class="page-break">
+        <h2>Abstract</h2>
+        <p>
+          This project presents a web-based Student Academic Record Management System developed to
+          solve the common problems of manual result preparation in schools. The system stores student,
+          teacher, class, subject, and mark information in a structured relational database and
+          generates result reports automatically. It was developed using Next.js for the web interface
+          and Supabase PostgreSQL for data storage, authentication, and security.
+        </p>
+        <p>
+          The system allows administrators to register students and teachers, define subjects and
+          classes, assign homeroom responsibilities, and manage academic structure. Teachers can enter
+          marks only for the subject and classes assigned to them, while students can view only their
+          own academic report. SQL views are used to compute total marks, average, rank, and pass or
+          fail status dynamically from the stored marks.
+        </p>
+        <p>
+          The main value of the project is that it combines database theory with a practical web
+          application. The design applies normalization, table relationships, constraints, SQL
+          functions, and row-level security policies. The result is a simple but realistic academic
+          information system that is scalable, easier to maintain, and more reliable than manual
+          workflows.
+        </p>
+
+        <h2>Table of Contents</h2>
+        <ol class="toc">
+          <li>Abstract</li>
+          <li>Introduction</li>
+          <li>Requirement Analysis</li>
+          <li>System Design</li>
+          <li>Entity Relationship Diagram</li>
+          <li>Database Design and Normalization</li>
+          <li>Implementation</li>
+          <li>Security and Exception Handling</li>
+          <li>Testing and Validation</li>
+          <li>System Development and Screenshots</li>
+          <li>Conclusion and Recommendations</li>
+          <li>Appendix</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>1. Introduction</h2>
+        <p>
+          Student result management is one of the most important activities in school administration.
+          Every semester, schools collect subject marks, prepare summaries, rank students, determine
+          pass or fail status, and present reports to students and parents. When this work is handled
+          manually by paper documents or disconnected spreadsheets, it becomes difficult to maintain
+          consistency and accuracy.
+        </p>
+        <p>
+          Manual systems usually create four major problems. First, totals and averages can be
+          calculated incorrectly. Second, the same information may be repeated in many files, which
+          leads to inconsistency. Third, it is difficult to control who is allowed to see or edit the
+          data. Fourth, the process does not scale well when the number of students, classes, or
+          subjects increases.
+        </p>
+        <p>
+          To solve these problems, this project introduces a Student Academic Record Management System
+          supported by a relational database and a web interface. The system records the core academic
+          data only once and generates reports directly from the database. This approach improves data
+          quality, security, and speed of report generation.
+        </p>
+
+        <h3>1.1 Problem Statement</h3>
+        <p>
+          Schools need a secure and reliable way to manage student academic records and generate result
+          sheets without depending on manual calculations or unstructured files. A database-driven
+          solution is necessary to reduce errors, maintain relationships between academic entities, and
+          support future growth.
+        </p>
+
+        <h3>1.2 General Objective</h3>
+        <p>
+          To design and implement a web-based student result management system that stores academic
+          data in a normalized relational database and generates result reports dynamically.
+        </p>
+
+        <h3>1.3 Specific Objectives</h3>
+        <ul>
+          <li>Analyze the academic result management problem and identify system requirements.</li>
+          <li>Design an ER model and relational schema with proper keys and constraints.</li>
+          <li>Apply normalization principles up to Third Normal Form.</li>
+          <li>Implement SQL objects such as tables, views, functions, and policies.</li>
+          <li>Develop a web application with different access levels for admin, teacher, and student.</li>
+          <li>Generate reports containing subject marks, total, average, rank, and status.</li>
+        </ul>
+
+        <h3>1.4 Scope of the Project</h3>
+        <p>
+          The project covers student registration, teacher registration, subject setup, class setup,
+          mark entry, and report generation. It does not include attendance management, finance, or
+          communication modules. The present system is focused only on academic record processing.
+        </p>
+      </section>
+
+      <section>
+        <h2>2. Requirement Analysis</h2>
+        <p>
+          Requirement analysis was based on the course project guideline and on the real needs of a
+          school environment. The system was designed around the main academic roles and the data they
+          interact with.
+        </p>
+
+        <h3>2.1 Functional Requirements</h3>
+        <table>
+          <tr>
+            <th style="width: 24%;">Module</th>
+            <th>Required Function</th>
+            <th>Implemented in the Project</th>
+          </tr>
+          <tr>
+            <td>Student Management</td>
+            <td>Register student and store identity and academic placement</td>
+            <td>Admin creates student records with name, gender, ID, grade, academic year, semester, and class.</td>
+          </tr>
+          <tr>
+            <td>Subject Management</td>
+            <td>Store subject list and total marks</td>
+            <td>Subjects are stored in a separate table with unique names and configurable total mark.</td>
+          </tr>
+          <tr>
+            <td>Teacher Management</td>
+            <td>Store teachers, subject assignment, and class assignment</td>
+            <td>Each teacher is linked to one subject and one or more classes through a bridge table.</td>
+          </tr>
+          <tr>
+            <td>Class Management</td>
+            <td>Create classes and assign homeroom teacher</td>
+            <td>Classes are stored independently and may have an optional homeroom teacher.</td>
+          </tr>
+          <tr>
+            <td>Mark Management</td>
+            <td>Store marks and validate range</td>
+            <td>Marks are recorded per student and subject using a composite key and a 0 to 100 check constraint.</td>
+          </tr>
+          <tr>
+            <td>Report Generation</td>
+            <td>Generate total, average, rank, and pass/fail</td>
+            <td>Views and application logic compute summaries dynamically.</td>
+          </tr>
+        </table>
+
+        <h3>2.2 Non-Functional Requirements</h3>
+        <ul>
+          <li>The system should be simple to use through a web browser.</li>
+          <li>The system should prevent unauthorized data access.</li>
+          <li>The system should support adding more subjects and classes in the future.</li>
+          <li>The system should maintain data integrity through database constraints.</li>
+          <li>The system should provide readable academic reports.</li>
+        </ul>
+
+        <h3>2.3 Users and Responsibilities</h3>
+        <table>
+          <tr>
+            <th style="width: 20%;">User</th>
+            <th>Role in the System</th>
+          </tr>
+          <tr>
+            <td>Admin</td>
+            <td>Manages students, teachers, classes, subjects, and accounts.</td>
+          </tr>
+          <tr>
+            <td>Teacher</td>
+            <td>Enters marks only for the assigned subject and assigned classes.</td>
+          </tr>
+          <tr>
+            <td>Student</td>
+            <td>Views only personal result information and academic standing.</td>
+          </tr>
+        </table>
+
+        <h3>2.4 Business Rules</h3>
+        <ul>
+          <li>Each student is identified by a unique student ID.</li>
+          <li>Each teacher is identified by a unique teacher ID.</li>
+          <li>Each subject has a maximum mark of 100 by default.</li>
+          <li>Marks below 50 are considered Fail at the subject level.</li>
+          <li>Teachers are restricted to their teaching scope.</li>
+          <li>Rank is generated automatically from stored marks.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>3. System Design</h2>
+        <p>
+          The system was designed as a web application with a clear separation between interface,
+          application logic, and database logic. The presentation layer is built using Next.js server
+          components and form actions. The database layer is implemented in Supabase PostgreSQL using
+          tables, views, functions, and security policies.
+        </p>
+
+        <h3>3.1 High-Level Architecture</h3>
+        <table>
+          <tr>
+            <th style="width: 22%;">Layer</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>Presentation Layer</td>
+            <td>Login page, dashboard pages, input forms, tables, and report screens.</td>
+          </tr>
+          <tr>
+            <td>Application Layer</td>
+            <td>Next.js server logic, role checks, queries, form handling, and report assembly.</td>
+          </tr>
+          <tr>
+            <td>Database Layer</td>
+            <td>PostgreSQL tables, views, stored functions, indexes, and row-level security policies.</td>
+          </tr>
+          <tr>
+            <td>Authentication Layer</td>
+            <td>Supabase authentication linked to profiles with admin, teacher, and student roles.</td>
+          </tr>
+        </table>
+
+        <div class="note">
+          <strong>Architecture flow:</strong> users interact with the browser interface, the interface
+          sends requests to Next.js server logic, and the server communicates with Supabase PostgreSQL
+          to store or retrieve data securely.
+        </div>
+
+        <h3>3.2 Major Modules</h3>
+        <ul>
+          <li>Authentication and role resolution</li>
+          <li>Student management</li>
+          <li>Teacher management</li>
+          <li>Class and subject management</li>
+          <li>Mark entry</li>
+          <li>Report generation</li>
+          <li>Password change workflow</li>
+        </ul>
+
+        <h3>3.3 Use Case Summary</h3>
+        <table>
+          <tr>
+            <th style="width: 22%;">Actor</th>
+            <th>Use Cases</th>
+          </tr>
+          <tr>
+            <td>Admin</td>
+            <td>Create student account, create teacher account, create class, assign homeroom teacher, create subject, view reports.</td>
+          </tr>
+          <tr>
+            <td>Teacher</td>
+            <td>Log in, view assigned subject, enter mark, update mark, review class report.</td>
+          </tr>
+          <tr>
+            <td>Student</td>
+            <td>Log in, open dashboard, view own result report, change password.</td>
+          </tr>
+        </table>
+      </section>
+
+      <section class="page-break">
+        <h2>4. Entity Relationship Diagram</h2>
+        <p>
+          The following ER diagram is based directly on the implemented database schema. It shows the
+          main entities, important attributes, primary keys, foreign keys, and the relationships
+          between academic data objects.
+        </p>
+
+        <div class="svg-wrap">
+          <svg viewBox="0 0 1120 1120" aria-label="Formal entity relationship diagram">
+            <defs>
+              <style>
+                .entity{fill:#fff;stroke:#111;stroke-width:1.7}
+                .head{fill:#ececec;stroke:#111;stroke-width:1.7}
+                .title{font:700 20px 'Times New Roman', serif}
+                .attr{font:14px 'Times New Roman', serif}
+                .meta{font:13px 'Times New Roman', serif}
+                .label{font:italic 13px 'Times New Roman', serif}
+                .small{font:13px 'Times New Roman', serif}
+                .line{stroke:#111;stroke-width:1.8;fill:none}
+                .opt{stroke-dasharray:7 5}
+              </style>
+            </defs>
+
+            <g>
+              <rect class="head" x="40" y="50" width="250" height="36" />
+              <rect class="entity" x="40" y="86" width="250" height="140" />
+              <text class="title" x="56" y="74">SUBJECTS</text>
+              <text class="attr" x="56" y="114">PK subject_id</text>
+              <text class="attr" x="56" y="140">subject_name</text>
+              <text class="meta" x="56" y="166">UNIQUE</text>
+              <text class="attr" x="56" y="192">total_mark</text>
+              <text class="meta" x="56" y="214">created_at</text>
+            </g>
+
+            <g>
+              <rect class="head" x="430" y="50" width="255" height="36" />
+              <rect class="entity" x="430" y="86" width="255" height="150" />
+              <text class="title" x="446" y="74">TEACHERS</text>
+              <text class="attr" x="446" y="114">PK teacher_id</text>
+              <text class="attr" x="446" y="140">name</text>
+              <text class="attr" x="446" y="166">FK subject_id</text>
+              <text class="meta" x="446" y="192">created_at</text>
+            </g>
+
+            <g>
+              <rect class="head" x="825" y="50" width="255" height="36" />
+              <rect class="entity" x="825" y="86" width="255" height="160" />
+              <text class="title" x="841" y="74">CLASSES</text>
+              <text class="attr" x="841" y="114">PK class_id</text>
+              <text class="attr" x="841" y="140">class_name</text>
+              <text class="meta" x="841" y="166">UNIQUE</text>
+              <text class="attr" x="841" y="192">FK homeroom_teacher_id</text>
+              <text class="meta" x="841" y="218">created_at</text>
+            </g>
+
+            <g>
+              <rect class="head" x="430" y="345" width="320" height="36" />
+              <rect class="entity" x="430" y="381" width="320" height="145" />
+              <text class="title" x="446" y="369">TEACHER_CLASS_ASSIGNMENTS</text>
+              <text class="attr" x="446" y="409">PK, FK teacher_id</text>
+              <text class="attr" x="446" y="435">PK, FK class_id</text>
+              <text class="meta" x="446" y="461">created_at</text>
+              <text class="label" x="446" y="496">Bridge entity for teacher-to-class assignment</text>
+            </g>
+
+            <g>
+              <rect class="head" x="820" y="340" width="260" height="36" />
+              <rect class="entity" x="820" y="376" width="260" height="210" />
+              <text class="title" x="836" y="364">STUDENTS</text>
+              <text class="attr" x="836" y="404">PK student_id</text>
+              <text class="attr" x="836" y="430">name</text>
+              <text class="attr" x="836" y="456">gender</text>
+              <text class="attr" x="836" y="482">grade</text>
+              <text class="attr" x="836" y="508">academic_year</text>
+              <text class="attr" x="836" y="534">semester</text>
+              <text class="attr" x="836" y="560">FK class_id</text>
+            </g>
+
+            <g>
+              <rect class="head" x="75" y="690" width="265" height="36" />
+              <rect class="entity" x="75" y="726" width="265" height="145" />
+              <text class="title" x="91" y="714">MARKS</text>
+              <text class="attr" x="91" y="754">PK, FK student_id</text>
+              <text class="attr" x="91" y="780">PK, FK subject_id</text>
+              <text class="attr" x="91" y="806">mark</text>
+              <text class="meta" x="91" y="832">created_at</text>
+            </g>
+
+            <g>
+              <rect class="head" x="430" y="760" width="320" height="36" />
+              <rect class="entity" x="430" y="796" width="320" height="180" />
+              <text class="title" x="446" y="784">PROFILES</text>
+              <text class="attr" x="446" y="824">PK id</text>
+              <text class="attr" x="446" y="850">full_name</text>
+              <text class="attr" x="446" y="876">login_id UNIQUE</text>
+              <text class="attr" x="446" y="902">role ENUM(admin, teacher, student)</text>
+              <text class="attr" x="446" y="928">FK student_id</text>
+              <text class="attr" x="446" y="954">FK teacher_id</text>
+              <text class="meta" x="446" y="974">role_link_check constraint</text>
+            </g>
+
+            <path class="line" d="M290 156 L430 156" />
+            <line class="line" x1="308" y1="144" x2="308" y2="168" />
+            <line class="line" x1="413" y1="144" x2="430" y2="156" />
+            <line class="line" x1="413" y1="156" x2="430" y2="156" />
+            <line class="line" x1="413" y1="168" x2="430" y2="156" />
+            <text class="small" x="334" y="142">1</text>
+            <text class="small" x="392" y="142">M</text>
+
+            <path class="line" d="M685 184 L825 184" />
+            <line class="line" x1="703" y1="172" x2="703" y2="196" />
+            <line class="line" x1="808" y1="172" x2="825" y2="184" />
+            <line class="line" x1="808" y1="184" x2="825" y2="184" />
+            <line class="line" x1="808" y1="196" x2="825" y2="184" />
+            <text class="small" x="726" y="170">1</text>
+            <text class="small" x="786" y="170">M</text>
+
+            <path class="line" d="M558 236 L558 345" />
+            <line class="line" x1="546" y1="254" x2="570" y2="254" />
+            <line class="line" x1="546" y1="328" x2="558" y2="345" />
+            <line class="line" x1="558" y1="328" x2="558" y2="345" />
+            <line class="line" x1="570" y1="328" x2="558" y2="345" />
+            <text class="small" x="570" y="274">1</text>
+            <text class="small" x="570" y="332">M</text>
+
+            <path class="line" d="M825 430 L750 430" />
+            <line class="line" x1="807" y1="418" x2="807" y2="442" />
+            <line class="line" x1="767" y1="418" x2="750" y2="430" />
+            <line class="line" x1="767" y1="430" x2="750" y2="430" />
+            <line class="line" x1="767" y1="442" x2="750" y2="430" />
+            <text class="small" x="790" y="418">1</text>
+            <text class="small" x="758" y="418">M</text>
+
+            <path class="line" d="M950 246 L950 340" />
+            <line class="line" x1="938" y1="264" x2="962" y2="264" />
+            <line class="line" x1="938" y1="323" x2="950" y2="340" />
+            <line class="line" x1="950" y1="323" x2="950" y2="340" />
+            <line class="line" x1="962" y1="323" x2="950" y2="340" />
+            <text class="small" x="962" y="282">1</text>
+            <text class="small" x="962" y="336">M</text>
+
+            <path class="line" d="M160 226 L160 690" />
+            <line class="line" x1="148" y1="244" x2="172" y2="244" />
+            <line class="line" x1="148" y1="673" x2="160" y2="690" />
+            <line class="line" x1="160" y1="673" x2="160" y2="690" />
+            <line class="line" x1="172" y1="673" x2="160" y2="690" />
+            <text class="small" x="172" y="268">1</text>
+            <text class="small" x="172" y="684">M</text>
+
+            <path class="line" d="M820 480 L720 480 L720 762 L340 762" />
+            <line class="line" x1="802" y1="468" x2="802" y2="492" />
+            <line class="line" x1="357" y1="750" x2="340" y2="762" />
+            <line class="line" x1="357" y1="762" x2="340" y2="762" />
+            <line class="line" x1="357" y1="774" x2="340" y2="762" />
+            <text class="small" x="786" y="466">1</text>
+            <text class="small" x="346" y="748">M</text>
+
+            <path class="line opt" d="M620 236 L620 760" />
+            <line class="line" x1="608" y1="254" x2="632" y2="254" />
+            <circle cx="620" cy="742" r="7" fill="#fff" stroke="#111" stroke-width="1.8" />
+            <line class="line" x1="608" y1="760" x2="632" y2="760" />
+            <text class="small" x="634" y="278">1</text>
+            <text class="small" x="634" y="748">0..1</text>
+
+            <path class="line opt" d="M820 520 L780 520 L780 886 L750 886" />
+            <line class="line" x1="802" y1="508" x2="802" y2="532" />
+            <circle cx="768" cy="886" r="7" fill="#fff" stroke="#111" stroke-width="1.8" />
+            <line class="line" x1="750" y1="874" x2="750" y2="898" />
+            <text class="small" x="786" y="506">1</text>
+            <text class="small" x="776" y="868">0..1</text>
+
+            <rect class="entity" x="40" y="995" width="1040" height="90" />
+            <text class="title" x="58" y="1022">LEGEND</text>
+            <line class="line" x1="66" y1="1052" x2="126" y2="1052" />
+            <line class="line" x1="82" y1="1040" x2="82" y2="1064" />
+            <line class="line" x1="109" y1="1040" x2="126" y2="1052" />
+            <line class="line" x1="109" y1="1052" x2="126" y2="1052" />
+            <line class="line" x1="109" y1="1064" x2="126" y2="1052" />
+            <text class="small" x="142" y="1057">One-to-many relationship</text>
+
+            <line class="line opt" x1="440" y1="1052" x2="500" y2="1052" />
+            <line class="line" x1="456" y1="1040" x2="456" y2="1064" />
+            <circle cx="487" cy="1052" r="7" fill="#fff" stroke="#111" stroke-width="1.8" />
+            <line class="line" x1="500" y1="1040" x2="500" y2="1064" />
+            <text class="small" x="518" y="1057">Optional one-to-one role link</text>
+
+            <text class="small" x="58" y="1080">Formal ERD shows persistent entities only.</text>
+            <text class="small" x="360" y="1080">Derived report views are intentionally excluded from the formal entity model.</text>
+          </svg>
+        </div>
+
+        <div class="diagram-note">
+          <strong>Relationship interpretation:</strong> the academic core of the database is modeled in
+          formal ER form using entities and relationships only. The diagram shows one-to-many links for
+          subject assignment, homeroom ownership, class membership, and mark storage, plus optional
+          one-to-one links from teacher and student records to authentication profiles.
+        </div>
+      </section>
+
+      <section>
+        <h2>5. Database Design and Normalization</h2>
+        <p>
+          The database was designed to avoid redundancy, preserve integrity, and support reporting.
+          The main design approach was to separate academic entities into different tables and connect
+          them through foreign keys.
+        </p>
+
+        <h3>5.1 Relational Schema</h3>
+        <table>
+          <tr>
+            <th style="width: 22%;">Table</th>
+            <th style="width: 22%;">Primary Key</th>
+            <th>Main Attributes and Relationships</th>
+          </tr>
+          <tr>
+            <td>subjects</td>
+            <td>subject_id</td>
+            <td>subject_name, total_mark, created_at</td>
+          </tr>
+          <tr>
+            <td>teachers</td>
+            <td>teacher_id</td>
+            <td>name, subject_id references subjects</td>
+          </tr>
+          <tr>
+            <td>classes</td>
+            <td>class_id</td>
+            <td>class_name, homeroom_teacher_id references teachers</td>
+          </tr>
+          <tr>
+            <td>teacher_class_assignments</td>
+            <td>(teacher_id, class_id)</td>
+            <td>bridge table between teachers and classes</td>
+          </tr>
+          <tr>
+            <td>students</td>
+            <td>student_id</td>
+            <td>name, gender, grade, academic_year, semester, class_id references classes</td>
+          </tr>
+          <tr>
+            <td>marks</td>
+            <td>(student_id, subject_id)</td>
+            <td>mark, created_at, references students and subjects</td>
+          </tr>
+          <tr>
+            <td>profiles</td>
+            <td>id</td>
+            <td>full_name, login_id, role, student_id, teacher_id</td>
+          </tr>
+        </table>
+
+        <h3>5.2 Primary Keys and Foreign Keys</h3>
+        <ul>
+          <li>Simple primary keys are used for subjects, teachers, classes, students, and profiles.</li>
+          <li>Composite primary keys are used for marks and teacher_class_assignments.</li>
+          <li>Foreign keys connect teacher to subject, class to homeroom teacher, student to class, and mark to student and subject.</li>
+          <li>Profile rows reference either a student or a teacher depending on the role.</li>
+        </ul>
+
+        <h3>5.3 Constraints</h3>
+        <ul>
+          <li><span class="mono">subject_name</span> is unique.</li>
+          <li><span class="mono">class_name</span> is unique.</li>
+          <li><span class="mono">gender</span> is limited by a check constraint.</li>
+          <li><span class="mono">mark between 0 and 100</span> is enforced in the marks table.</li>
+          <li>Profiles use a role-link check to stop invalid combinations.</li>
+        </ul>
+
+        <h3>5.4 Normalization</h3>
+        <h4>First Normal Form (1NF)</h4>
+        <p>
+          All tables store atomic values. There are no repeating groups inside a single row. For
+          example, student subjects are not stored in one column; they are stored through the marks
+          table.
+        </p>
+
+        <h4>Second Normal Form (2NF)</h4>
+        <p>
+          Partial dependency is removed. In the marks table, the only non-key attribute is the mark,
+          and it depends on the full composite key of student_id and subject_id.
+        </p>
+
+        <h4>Third Normal Form (3NF)</h4>
+        <p>
+          Transitive dependency is minimized. Teacher information is stored in the teachers table,
+          subject information is stored in the subjects table, and class information is stored in the
+          classes table. Derived values such as total, average, and rank are not stored in student
+          rows; instead they are computed using views.
+        </p>
+      </section>
+
+      <section>
+        <h2>6. Implementation</h2>
+        <p>
+          The implementation combines web development tools with SQL database objects. The frontend and
+          server logic are written in TypeScript and executed through Next.js, while the persistent data
+          model and reporting calculations are implemented in PostgreSQL.
+        </p>
+
+        <h3>6.1 Development Tools</h3>
+        <table>
+          <tr>
+            <th style="width: 26%;">Tool</th>
+            <th>Purpose</th>
+          </tr>
+          <tr>
+            <td>Next.js</td>
+            <td>Builds the web interface, routes, and server-rendered pages.</td>
+          </tr>
+          <tr>
+            <td>React</td>
+            <td>Creates reusable UI components.</td>
+          </tr>
+          <tr>
+            <td>TypeScript</td>
+            <td>Provides type safety in application code.</td>
+          </tr>
+          <tr>
+            <td>Supabase</td>
+            <td>Provides PostgreSQL database, authentication, and row-level security.</td>
+          </tr>
+          <tr>
+            <td>Tailwind CSS</td>
+            <td>Styles the interface.</td>
+          </tr>
+        </table>
+
+        <h3>6.2 Important SQL Objects</h3>
+        <table>
+          <tr>
+            <th style="width: 30%;">SQL Object</th>
+            <th>Purpose</th>
+          </tr>
+          <tr>
+            <td>student_subject_report view</td>
+            <td>Shows subject-level marks and pass/fail status for each student.</td>
+          </tr>
+          <tr>
+            <td>student_report_summary view</td>
+            <td>Calculates total, average, and rank using aggregation and window functions.</td>
+          </tr>
+          <tr>
+            <td>resolve_login_email()</td>
+            <td>Resolves visible login ID to the hidden email used in authentication.</td>
+          </tr>
+          <tr>
+            <td>create_student_with_account()</td>
+            <td>Creates student row, auth row, and profile row in one workflow.</td>
+          </tr>
+          <tr>
+            <td>create_teacher_with_account()</td>
+            <td>Creates teacher, class assignments, auth row, and profile row.</td>
+          </tr>
+          <tr>
+            <td>change_own_password()</td>
+            <td>Allows authenticated users to change their password securely.</td>
+          </tr>
+        </table>
+
+        <h3>6.3 Example SQL for Table Creation</h3>
+        <div class="code">create table if not exists public.students (
+  student_id text primary key,
+  name text not null,
+  gender text not null check (gender in ('male', 'female', 'other')),
+  grade text not null,
+  academic_year text not null,
+  semester text not null,
+  class_id uuid references public.classes(class_id) on delete set null
+);</div>
+
+        <h3>6.4 Example SQL for Report Computation</h3>
+        <div class="code">create or replace view public.student_report_summary as
+select
+  s.student_id,
+  s.name as student_name,
+  c.class_name,
+  coalesce(sum(m.mark), 0) as total,
+  coalesce(avg(m.mark), 0) as average,
+  rank() over (order by coalesce(sum(m.mark), 0) desc) as rank
+from public.students s
+left join public.classes c on c.class_id = s.class_id
+left join public.marks m on m.student_id = s.student_id
+group by s.student_id, s.name, c.class_name;</div>
+
+        <h3>6.5 Computation Logic</h3>
+        <ul>
+          <li><strong>Total</strong> is calculated using SQL <span class="mono">SUM(mark)</span>.</li>
+          <li><strong>Average</strong> is calculated using SQL <span class="mono">AVG(mark)</span> over stored subject marks.</li>
+          <li><strong>Rank</strong> is calculated using SQL <span class="mono">RANK() OVER(...)</span>.</li>
+          <li><strong>Subject status</strong> is Pass when mark is 50 or above, otherwise Fail.</li>
+          <li><strong>Overall report status</strong> is determined from the student average in the application interface.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>7. Security and Exception Handling</h2>
+        <p>
+          A strong point of the system is that security rules are enforced both in the application code
+          and in the database. This is important because academic data is sensitive and should not be
+          visible to unauthorized users.
+        </p>
+
+        <h3>7.1 Role-Based Access</h3>
+        <table>
+          <tr>
+            <th style="width: 20%;">Role</th>
+            <th>Access Rules</th>
+          </tr>
+          <tr>
+            <td>Admin</td>
+            <td>Can manage students, teachers, subjects, classes, and see institutional reports.</td>
+          </tr>
+          <tr>
+            <td>Teacher</td>
+            <td>Can read assigned students and classes, and can insert or update marks only within assigned scope.</td>
+          </tr>
+          <tr>
+            <td>Student</td>
+            <td>Can read only personal profile and personal result data.</td>
+          </tr>
+        </table>
+
+        <h3>7.2 Row-Level Security Policies</h3>
+        <p>
+          The database enables row-level security on the main tables. Policies are defined for
+          profiles, teachers, classes, subjects, students, marks, and teacher_class_assignments. This
+          means the database itself checks which rows a user may select, insert, or update.
+        </p>
+
+        <h3>7.3 Validation Rules</h3>
+        <ul>
+          <li>Mark values outside the range 0 to 100 are rejected.</li>
+          <li>Duplicate login IDs are blocked.</li>
+          <li>Teachers cannot save marks for a subject that is not assigned to them.</li>
+          <li>Teachers cannot save marks for students outside their assigned classes.</li>
+          <li>Password changes require the correct current password.</li>
+        </ul>
+
+        <h3>7.4 Exception Handling</h3>
+        <p>
+          Stored functions raise readable database exceptions for invalid operations such as duplicate
+          IDs or unauthorized account creation. On the web interface, these errors are displayed using
+          alert messages or redirects with error parameters. This approach gives the user immediate
+          feedback and protects the integrity of the stored data.
+        </p>
+      </section>
+
+      <section>
+        <h2>8. Testing and Validation</h2>
+        <p>
+          The implemented system was reviewed by checking the expected behavior of the major workflows.
+          Testing focused on input validation, relationship consistency, access control, and report
+          computation.
+        </p>
+
+        <h3>8.1 Test Cases</h3>
+        <table>
+          <tr>
+            <th style="width: 32%;">Test Scenario</th>
+            <th>Expected Result</th>
+          </tr>
+          <tr>
+            <td>Create a subject with an existing name</td>
+            <td>The system rejects the duplicate subject and shows an error.</td>
+          </tr>
+          <tr>
+            <td>Insert a mark greater than 100</td>
+            <td>The database check constraint rejects the value.</td>
+          </tr>
+          <tr>
+            <td>Teacher enters mark for unassigned subject</td>
+            <td>The operation is rejected by application logic and database policy.</td>
+          </tr>
+          <tr>
+            <td>Student opens another student's report</td>
+            <td>The system blocks access and limits the student to personal data only.</td>
+          </tr>
+          <tr>
+            <td>Admin creates a new student account</td>
+            <td>The student row, auth row, and profile are created successfully.</td>
+          </tr>
+          <tr>
+            <td>Open report page after entering marks</td>
+            <td>Total, average, rank, and subject status are recalculated correctly.</td>
+          </tr>
+        </table>
+
+        <h3>8.2 Validation Summary</h3>
+        <p>
+          The database design and application logic support the expected project objectives. Core
+          relationships are preserved by foreign keys, invalid inputs are blocked by constraints, and
+          reporting values are calculated dynamically rather than copied manually. This improves
+          consistency and reduces the risk of stale or conflicting results.
+        </p>
+      </section>
+
+      <section class="page-break">
+        <h2>9. System Development and Screenshots</h2>
+        <p>
+          The web application includes separate workflows for login, administration, mark entry, and
+          result reporting. The following screenshots show the current state of the interface.
+        </p>
+
+        <div class="figure-grid">
+          <div class="figure">
+            <img src="../public/images/img/image%201.png" alt="Login page screenshot" />
+            <div class="caption">
+              <strong>Figure 1:</strong> Login page. Users enter full name, institutional ID, and
+              password to access the system.
+            </div>
+          </div>
+          <div class="figure">
+            <img src="../public/images/img/image.png" alt="Landing page screenshot" />
+            <div class="caption">
+              <strong>Figure 2:</strong> Landing page. The interface introduces the registrar,
+              teacher, and student workflows.
+            </div>
+          </div>
+        </div>
+
+        <h3>9.1 Interface Observations</h3>
+        <ul>
+          <li>The login page supports all three roles using one access form.</li>
+          <li>The public landing page explains the value of the platform before sign-in.</li>
+          <li>The system uses clear card layouts, tables, and readable forms.</li>
+          <li>Reports are shown in a structured format that matches academic use cases.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>10. Additional Screenshots</h2>
+        <p>
+          The following screenshots provide more evidence of the implemented workflows, including
+          student registration, teacher mark entry, class performance reporting, and the final student
+          result sheet.
+        </p>
+
+        <div class="figure-grid">
+          <div class="figure">
+            <img src="../public/images/img/image%203.png" alt="Add student page screenshot" />
+            <div class="caption">
+              <strong>Figure 3:</strong> Student registration page used by the administrator to create
+              a new learner record and issue a temporary password.
+            </div>
+          </div>
+          <div class="figure">
+            <img src="../public/images/img/image%205.png" alt="Mark entry page screenshot" />
+            <div class="caption">
+              <strong>Figure 4:</strong> Teacher mark entry page showing assigned subject, assigned
+              classes, and the form used to record or update marks.
+            </div>
+          </div>
+        </div>
+
+        <div class="figure-grid" style="margin-top: 14px;">
+          <div class="figure">
+            <img src="../public/images/img/image%202.png" alt="Class performance matrix screenshot" />
+            <div class="caption">
+              <strong>Figure 5:</strong> Class performance matrix showing dynamic subject columns,
+              pass rate, student totals, averages, rank, and overall status.
+            </div>
+          </div>
+          <div class="figure">
+            <img src="../public/images/img/image%204.png" alt="Student result report screenshot" />
+            <div class="caption">
+              <strong>Figure 6:</strong> Individual student result sheet showing total, average, rank,
+              class, and subject performance breakdown.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>11. Conclusion and Recommendations</h2>
+        <p>
+          The Student Academic Record Management System successfully applies advanced database concepts
+          to a practical academic problem. The project uses a normalized relational schema, primary and
+          foreign keys, constraints, views, SQL functions, and role-based security to manage academic
+          information in a reliable way.
+        </p>
+        <p>
+          Compared to manual workflows, the system improves consistency, reduces calculation errors,
+          and makes it easier to control access to data. Because reports are derived from the stored
+          marks at runtime, the system also avoids duplication of calculated values and keeps reporting
+          logic centralized.
+        </p>
+
+        <h3>Recommendations</h3>
+        <ul>
+          <li>Add downloadable PDF export for student reports.</li>
+          <li>Add historical archiving for multiple academic years and semesters.</li>
+          <li>Add teacher comments and behavioral remarks in the result report.</li>
+          <li>Add more screenshots for the admin dashboard and reporting pages before submission.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Appendix</h2>
+        <h3>Appendix A: Main Database Objects</h3>
+        <table>
+          <tr>
+            <th style="width: 28%;">Category</th>
+            <th>Objects</th>
+          </tr>
+          <tr>
+            <td>Tables</td>
+            <td>subjects, teachers, classes, teacher_class_assignments, students, marks, profiles</td>
+          </tr>
+          <tr>
+            <td>Views</td>
+            <td>student_subject_report, student_report_summary</td>
+          </tr>
+          <tr>
+            <td>Functions</td>
+            <td>
+              current_role, current_teacher_subject_id, current_teacher_class_ids,
+              resolve_login_email, build_hidden_login_email, create_student_with_account,
+              create_teacher_with_account, change_own_password
+            </td>
+          </tr>
+          <tr>
+            <td>Security</td>
+            <td>Row-level security policies on profiles, teachers, classes, subjects, students, marks, and assignments</td>
+          </tr>
+        </table>
+
+        <h3>Appendix B: Team Signatures</h3>
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Signature</th>
+          </tr>
+          <tr>
+            <td>[Insert Name]</td>
+            <td>Team Leader</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>[Insert Name]</td>
+            <td>Database Designer</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>[Insert Name]</td>
+            <td>Documentation Lead</td>
+            <td></td>
+          </tr>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>

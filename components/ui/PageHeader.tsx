@@ -14,18 +14,19 @@ export function PageHeader({ eyebrow, title, description, actions, className }: 
   return (
     <section
       className={cn(
-        "flex flex-col gap-5 rounded-[2rem] border border-slate-200/80 bg-white/75 p-6 shadow-[var(--shadow-card)] backdrop-blur md:flex-row md:items-end md:justify-between md:p-7",
+        "relative overflow-hidden rounded-[2.25rem] border border-slate-200 bg-white p-6 shadow-[var(--shadow-card)] md:flex md:items-end md:justify-between md:gap-8 md:p-8",
         className
       )}
     >
-      <div className="max-w-3xl">
+      <div className="absolute inset-x-0 top-0 h-1.5 bg-blue-600" />
+      <div className="relative max-w-3xl">
         {eyebrow ? (
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">{eyebrow}</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-blue-600">{eyebrow}</p>
         ) : null}
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">{title}</h1>
-        {description ? <p className="mt-3 text-sm leading-6 text-slate-500 md:text-base">{description}</p> : null}
+        <h1 className="heading-display mt-3 text-[2.4rem] text-slate-900 md:text-[3.2rem] md:leading-[1.02]">{title}</h1>
+        {description ? <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-500 md:text-base">{description}</p> : null}
       </div>
-      {actions ? <div className="flex flex-wrap items-center gap-3">{actions}</div> : null}
+      {actions ? <div className="relative flex flex-wrap items-center gap-3">{actions}</div> : null}
     </section>
   );
 }

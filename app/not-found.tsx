@@ -8,7 +8,7 @@ export default function NotFound() {
     <main className="mx-auto flex min-h-screen max-w-3xl items-center px-4 py-10 sm:px-6">
       <Card className="w-full">
         <CardHeader>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">Not found</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-500">Not found</p>
           <h1 className="text-3xl font-semibold text-slate-950">The page you requested does not exist</h1>
           <p className="text-sm leading-6 text-slate-500">
             The record or route may have moved, or the URL may be incorrect. Return to the dashboard

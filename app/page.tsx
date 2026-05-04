@@ -1,240 +1,378 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
-import { FadeIn, StaggerGroup, StaggerItem } from "@/components/ui/Motion";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader } from "@/components/ui/Card";
+import {
+  CoursesIcon,
+  DashboardIcon,
+  ReportsIcon,
+  SparklesIcon,
+  StudentsIcon,
+  TrendUpIcon
+} from "@/components/ui/Icons";
+import { FadeIn, StaggerGroup, StaggerItem } from "@/components/ui/Motion";
 
-const stats = [
-  { label: "Role-ready workspaces", value: "3" },
-  { label: "Core academic modules", value: "6" },
-  { label: "Live report visibility", value: "100%" }
+const heroStats = [
+  { label: "Student onboarding", value: "01 min" },
+  { label: "Core workspaces", value: "04" },
+  { label: "Responsive coverage", value: "100%" }
 ];
 
-const featureCards = [
+const productModules = [
   {
-    title: "Registrar control",
-    description:
-      "Manage students, classes, teachers, and subjects from one structured command center."
+    title: "Students",
+    description: "Create polished learner profiles, assign classes, and manage academic identity without friction.",
+    icon: StudentsIcon
   },
   {
-    title: "Teacher focus",
-    description:
-      "Enter marks quickly, stay within assigned subject scope, and keep class progress visible."
+    title: "Courses",
+    description: "Organize the curriculum, align teacher ownership, and keep marks tied to the right subject context.",
+    icon: CoursesIcon
   },
   {
-    title: "Student clarity",
-    description:
-      "View polished result sheets with totals, averages, rank, and pass or fail status."
+    title: "Reports",
+    description: "Surface totals, averages, and rankings with clean, report-ready summaries.",
+    icon: ReportsIcon
   }
 ];
 
-const pillars = [
-  "Clean academic data structure built for real school operations.",
-  "Fast dashboards and report views with a polished modern interface.",
-  "Secure role-based access for registrar, teacher, and student workflows."
+const workflowSteps = [
+  "Registrar adds a student, class assignment, and secure starter login.",
+  "Teachers work inside subject and class scope without admin clutter.",
+  "Students open clean reports with totals, averages, ranking, and pass status."
+];
+
+const roleHighlights = [
+  {
+    title: "Admin",
+    description: "Institution-wide control over records, staffing, classes, and reporting workflows."
+  },
+  {
+    title: "Teacher",
+    description: "Focused assessment flow with student visibility limited to assigned subject and class context."
+  },
+  {
+    title: "Student",
+    description: "A calm portal for checking results, rank, and academic progress without navigation noise."
+  }
+];
+
+const flowPreview = [
+  { label: "Admissions queue", value: "24", width: "72%" },
+  { label: "Results published", value: "91%", width: "91%" },
+  { label: "Reports reviewed", value: "68%", width: "68%" }
 ];
 
 export default function HomePage() {
   return (
-    <main className="relative overflow-hidden bg-slate-950 text-white">
-      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,#020617_0%,#0f172a_52%,#020617_100%)]" />
-      <div className="absolute inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.22),transparent_34%),radial-gradient(circle_at_top_right,rgba(59,130,246,0.2),transparent_28%)]" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-[24rem] bg-[radial-gradient(circle_at_bottom,rgba(14,165,233,0.12),transparent_28%)]" />
+    <main className="relative overflow-hidden bg-transparent">
+      <section className="relative px-4 pt-4 sm:px-6 lg:pt-6">
+        <div className="absolute inset-x-0 top-0 -z-20 h-[44rem] bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.2),transparent_28%),radial-gradient(circle_at_top_right,rgba(14,165,233,0.18),transparent_24%)]" />
+        <div className="mx-auto max-w-7xl">
+          <div className="relative overflow-hidden rounded-[2.7rem] bg-[linear-gradient(135deg,#020617_0%,#0f172a_42%,#172554_100%)] text-white shadow-[0_40px_120px_rgba(15,23,42,0.28)]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(125,211,252,0.2),transparent_26%),radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.2),transparent_32%)]" />
+            <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.04),transparent)] lg:block" />
 
-      <section className="mx-auto grid min-h-screen max-w-7xl gap-10 px-4 py-8 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:py-12">
-        <FadeIn className="max-w-3xl">
-          <Badge className="bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/20" variant="neutral">
-            Student Result System
-          </Badge>
+            <div className="relative grid gap-10 p-6 sm:p-8 lg:grid-cols-[1.02fr_0.98fr] lg:p-10 xl:p-12">
+              <FadeIn className="max-w-3xl">
+                <Badge className="border-white/10 bg-white/10 text-sky-100" variant="neutral">
+                  Student Management Suite
+                </Badge>
 
-          <h1 className="mt-6 text-4xl font-semibold tracking-tight text-white md:text-6xl md:leading-[1.05]">
-            A polished academic platform for records, class management, and beautiful result
-            reporting.
-          </h1>
+                <h1 className="heading-display mt-6 max-w-4xl text-5xl leading-[0.98] text-white md:text-7xl">
+                  School operations that feel like premium software, not a spreadsheet.
+                </h1>
 
-          <p className="mt-5 max-w-2xl text-base leading-8 text-slate-300 md:text-lg">
-            Built for modern schools that want cleaner registrar workflows, structured teacher mark
-            entry, and student-friendly reports from one elegant system.
-          </p>
+                <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 md:text-lg">
+                  Bring student records, course structure, results, and reporting workflows into
+                  one sharp, modern dashboard built for real academic teams.
+                </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/login">
-              <Button size="lg" variant="secondary">
-                Open dashboard
-              </Button>
-            </Link>
-            <Link href="/login">
-              <Button
-                className="border-white/10 bg-white/5 text-slate-100 hover:border-white/15 hover:bg-white/10 hover:text-white"
-                size="lg"
-                variant="ghost"
-              >
-                Explore login
-              </Button>
-            </Link>
-          </div>
-
-          <div className="mt-10 grid gap-4 sm:grid-cols-3">
-            {stats.map((item) => (
-              <div
-                key={item.label}
-                className="rounded-[1.75rem] border border-white/10 bg-white/5 px-5 py-5 shadow-[0_18px_50px_rgba(2,6,23,0.35)] backdrop-blur"
-              >
-                <p className="text-3xl font-semibold tracking-tight text-white">{item.value}</p>
-                <p className="mt-2 text-sm leading-6 text-slate-400">{item.label}</p>
-              </div>
-            ))}
-          </div>
-        </FadeIn>
-
-        <FadeIn className="lg:justify-self-end" delay={0.08}>
-          <div className="relative mx-auto w-full max-w-xl">
-            <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-[2rem] bg-emerald-500/10 blur-3xl" />
-
-            <Card className="relative overflow-hidden border-white/10 bg-slate-900/75 shadow-[0_25px_80px_rgba(2,6,23,0.45)]">
-              <CardHeader className="border-b border-white/10 bg-slate-900/90 text-white">
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-300">
-                      Live platform preview
-                    </p>
-                    <h2 className="mt-3 text-2xl font-semibold">Academic operations at a glance</h2>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-right">
-                    <p className="text-xs uppercase tracking-[0.18em] text-slate-300">Status</p>
-                    <p className="mt-1 text-sm font-semibold text-white">Active workflow</p>
-                  </div>
-                </div>
-              </CardHeader>
-
-              <CardContent className="grid gap-5 pt-6">
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <PreviewMetric
-                    description="Students, classes, and staff in one clean workflow."
-                    label="Registrar view"
-                    value="Structured"
-                  />
-                  <PreviewMetric
-                    description="Subject-scoped mark entry with class-based visibility."
-                    label="Teacher flow"
-                    value="Focused"
-                  />
-                </div>
-
-                <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-4">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-white">Report readiness</p>
-                      <p className="mt-1 text-sm text-slate-400">
-                        Dynamic totals, averages, rank, and pass or fail status.
-                      </p>
-                    </div>
-                    <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-300 ring-1 ring-emerald-500/20">
-                      Auto calculated
-                    </span>
-                  </div>
-
-                  <div className="mt-4 grid gap-3">
-                    {[
-                      { label: "Academic records", width: "92%" },
-                      { label: "Teacher assessment flow", width: "84%" },
-                      { label: "Student report visibility", width: "96%" }
-                    ].map((item) => (
-                      <div key={item.label} className="grid gap-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="font-medium text-slate-200">{item.label}</span>
-                          <span className="text-slate-400">{item.width}</span>
-                        </div>
-                        <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-sky-500"
-                            style={{ width: item.width }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid gap-3">
-                  {pillars.map((item) => (
-                    <div
-                      key={item}
-                      className="flex items-start gap-3 rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3"
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Link href="/login">
+                    <Button size="lg" variant="primary">
+                      Open dashboard
+                    </Button>
+                  </Link>
+                  <Link href="/students">
+                    <Button
+                      className="border-white/10 bg-white/[0.06] text-slate-100 hover:border-white/15 hover:bg-white/10 hover:text-white"
+                      size="lg"
+                      variant="ghost"
                     >
-                      <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                      <p className="text-sm leading-6 text-slate-300">{item}</p>
+                      Preview student flow
+                    </Button>
+                  </Link>
+                </div>
+
+                <div className="mt-10 grid gap-4 sm:grid-cols-3">
+                  {heroStats.map((item) => (
+                    <div
+                      key={item.label}
+                      className="rounded-[1.8rem] border border-white/10 bg-white/[0.05] px-5 py-5 backdrop-blur"
+                    >
+                      <p className="heading-display text-4xl text-white">{item.value}</p>
+                      <p className="mt-2 text-sm leading-6 text-slate-400">{item.label}</p>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </FadeIn>
-      </section>
+              </FadeIn>
 
-      <section className="mx-auto max-w-7xl px-4 pb-14 sm:px-6">
-        <StaggerGroup className="grid gap-4 lg:grid-cols-3">
-          {featureCards.map((feature) => (
-            <StaggerItem key={feature.title}>
-              <Card className="h-full border-white/10 bg-white/5 shadow-[0_18px_50px_rgba(2,6,23,0.35)]">
-                <CardHeader>
-                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-300">
-                    {feature.title}
-                  </p>
-                  <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm leading-7 text-slate-300">{feature.description}</p>
-                </CardContent>
-              </Card>
-            </StaggerItem>
-          ))}
-        </StaggerGroup>
+              <FadeIn className="lg:justify-self-end" delay={0.08}>
+                <div className="relative mx-auto w-full max-w-2xl">
+                  <div className="absolute -right-6 top-12 h-40 w-40 rounded-full bg-blue-500/18 blur-3xl" />
+                  <div className="absolute -left-4 bottom-8 h-44 w-44 rounded-full bg-blue-400/12 blur-3xl" />
 
-        <FadeIn delay={0.12}>
-          <div className="mt-8 rounded-[2rem] border border-slate-200/80 bg-slate-950 px-6 py-8 text-white shadow-[var(--shadow-soft)]">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-              <div className="max-w-3xl">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-300">
-                  Ready to begin
-                </p>
-                <h3 className="mt-3 text-3xl font-semibold tracking-tight">
-                  Start with a cleaner first impression for your school management workflow.
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-300 md:text-base">
-                  Sign in and manage classes, students, teachers, marks, and reports from one refined
-                  academic system.
-                </p>
-              </div>
-              <Link href="/login">
-                <Button size="lg" variant="secondary">
-                  Go to login
-                </Button>
-              </Link>
+                  <Card className="relative overflow-hidden border-white/10 bg-slate-950/78 shadow-[0_30px_100px_rgba(2,6,23,0.42)]">
+                    <CardHeader className="border-b border-white/10 bg-slate-950/92 text-white">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-200">
+                            Live interface preview
+                          </p>
+                          <h2 className="heading-display mt-3 text-[2rem] text-white">
+                            Academic control room
+                          </h2>
+                        </div>
+                        <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-right">
+                          <p className="text-[11px] uppercase tracking-[0.22em] text-slate-300">Workspace</p>
+                          <p className="mt-1 text-sm font-semibold text-white">Dashboard active</p>
+                        </div>
+                      </div>
+                    </CardHeader>
+
+                    <CardContent className="grid gap-5 pt-6">
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <PreviewTile
+                          description="Track admissions, growth, and roster movement in one place."
+                          icon={<StudentsIcon className="h-5 w-5" />}
+                          label="Students"
+                          value="1,284"
+                        />
+                        <PreviewTile
+                          description="Review which academic and operational tasks still need attention."
+                          icon={<DashboardIcon className="h-5 w-5" />}
+                          label="Tasks"
+                          value="18 open"
+                        />
+                      </div>
+
+                      <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-4">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-semibold text-white">Today&apos;s school flow</p>
+                            <p className="mt-1 text-sm text-slate-400">
+                              Designed for the rhythm of student intake, reporting, and daily review.
+                            </p>
+                          </div>
+                          <span className="rounded-full bg-blue-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-sky-200 ring-1 ring-blue-500/20">
+                            Production-ready UI
+                          </span>
+                        </div>
+
+                        <div className="mt-4 grid gap-3">
+                          {flowPreview.map((item) => (
+                            <div key={item.label} className="grid gap-2">
+                              <div className="flex items-center justify-between text-sm">
+                                <span className="font-medium text-slate-200">{item.label}</span>
+                                <span className="text-slate-400">{item.value}</span>
+                              </div>
+                              <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
+                                <div
+                                  className="h-full rounded-full bg-gradient-to-r from-blue-600 to-blue-400"
+                                  style={{ width: item.width }}
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="grid gap-3 md:grid-cols-3">
+                        {[
+                          {
+                            label: "Students",
+                            text: "Profiles, search, filters, onboarding."
+                          },
+                          {
+                            label: "Courses",
+                            text: "Subjects, marks, class-scoped teaching."
+                          },
+                          {
+                            label: "Reports",
+                            text: "Totals, averages, rank, clean result views."
+                          }
+                        ].map((item) => (
+                          <div
+                            key={item.label}
+                            className="rounded-[1.45rem] border border-white/10 bg-slate-950/45 p-4"
+                          >
+                            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-200">
+                              {item.label}
+                            </p>
+                            <p className="mt-2 text-sm leading-6 text-slate-300">{item.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </FadeIn>
             </div>
           </div>
-        </FadeIn>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 pb-14 pt-10 sm:px-6">
+        <StaggerGroup className="grid gap-4 lg:grid-cols-3">
+          {productModules.map((module) => {
+            const Icon = module.icon;
+
+            return (
+              <StaggerItem key={module.title}>
+                <Card className="h-full">
+                  <CardHeader>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700 shadow-[0_14px_30px_rgba(37,99,235,0.12)]">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <p className="mt-4 text-xs font-semibold uppercase tracking-[0.26em] text-blue-600">
+                      {module.title}
+                    </p>
+                    <h3 className="heading-display text-[1.7rem] text-slate-950">{module.title} workspace</h3>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm leading-7 text-slate-500">{module.description}</p>
+                  </CardContent>
+                </Card>
+              </StaggerItem>
+            );
+          })}
+        </StaggerGroup>
+
+        <div className="mt-6 grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
+          <FadeIn>
+            <Card className="overflow-hidden bg-[linear-gradient(135deg,rgba(255,255,255,0.98),rgba(238,246,255,0.94))]">
+              <CardHeader>
+                <Badge variant="accent">Product rhythm</Badge>
+                <h3 className="heading-display text-[2rem] text-slate-950">
+                  Built around the daily movement of a real school.
+                </h3>
+                <p className="text-sm leading-7 text-slate-500">
+                  The front page now reflects the same product structure users expect after login:
+                  intake, teaching, reporting, and daily operations.
+                </p>
+              </CardHeader>
+              <CardContent className="grid gap-4">
+                {workflowSteps.map((step, index) => (
+                  <div
+                    key={step}
+                    className="flex items-start gap-4 rounded-[1.6rem] border border-slate-200/80 bg-white/80 px-4 py-4"
+                  >
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-sm font-semibold text-white">
+                      0{index + 1}
+                    </div>
+                    <p className="pt-1 text-sm leading-7 text-slate-600">{step}</p>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </FadeIn>
+
+          <div className="grid gap-6">
+            <FadeIn delay={0.06}>
+              <Card className="overflow-hidden bg-slate-950 text-white">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/20 text-sky-200">
+                      <SparklesIcon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-200">
+                        Role-based clarity
+                      </p>
+                      <h3 className="heading-display mt-2 text-[1.8rem] text-white">
+                        Three roles, one consistent visual system.
+                      </h3>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-3">
+                    {roleHighlights.map((item) => (
+                      <div
+                        key={item.title}
+                        className="rounded-[1.5rem] border border-white/10 bg-white/[0.05] px-4 py-4"
+                      >
+                        <p className="text-sm font-semibold text-white">{item.title}</p>
+                        <p className="mt-2 text-sm leading-6 text-slate-300">{item.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </FadeIn>
+
+            <FadeIn delay={0.12}>
+              <div className="rounded-[2rem] border border-slate-200/80 bg-white px-6 py-6 shadow-[var(--shadow-card)]">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+                    <TrendUpIcon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.26em] text-blue-600">
+                      Ready to use
+                    </p>
+                    <h3 className="heading-display mt-2 text-[1.8rem] text-slate-950">
+                      Step into the redesigned dashboard.
+                    </h3>
+                    <p className="mt-3 max-w-xl text-sm leading-7 text-slate-500">
+                      Open the workspace and move through students, courses, reports, and classes
+                      from a cleaner front door.
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <Link href="/login">
+                        <Button variant="primary">Go to login</Button>
+                      </Link>
+                      <Link href="/dashboard">
+                        <Button variant="ghost">Dashboard route</Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+        </div>
       </section>
     </main>
   );
 }
 
-function PreviewMetric({
+function PreviewTile({
   label,
   value,
-  description
+  description,
+  icon
 }: {
   label: string;
   value: string;
   description: string;
+  icon: ReactNode;
 }) {
   return (
-    <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/55 p-4 shadow-sm">
-      <p className="text-sm font-medium text-slate-400">{label}</p>
-      <p className="mt-2 text-2xl font-semibold tracking-tight text-white">{value}</p>
-      <p className="mt-2 text-sm leading-6 text-slate-300">{description}</p>
+    <div className="rounded-[1.55rem] border border-white/10 bg-slate-950/45 p-4 shadow-sm">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-sm font-medium text-slate-400">{label}</p>
+          <p className="heading-display mt-2 text-[2rem] text-white">{value}</p>
+        </div>
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-sky-200">
+          {icon}
+        </div>
+      </div>
+      <p className="mt-3 text-sm leading-6 text-slate-300">{description}</p>
     </div>
   );
 }

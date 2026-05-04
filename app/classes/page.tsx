@@ -76,7 +76,7 @@ export default async function ClassesPage() {
               <form action={updateHomeroomTeacherAction} className="flex flex-wrap items-center gap-2">
                 <input name="class_id" type="hidden" value={classRoom.class_id} />
                 <select
-                  className="min-w-44 rounded-2xl border border-slate-200/80 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                  className="min-w-44 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10"
                   defaultValue={classRoom.homeroom_teacher_id ?? ""}
                   name="homeroom_teacher_id"
                 >

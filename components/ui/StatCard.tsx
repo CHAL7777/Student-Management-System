@@ -14,18 +14,23 @@ export function StatCard({ label, value, description, icon, className }: StatCar
   return (
     <article
       className={cn(
-        "rounded-[1.75rem] border border-slate-200/80 bg-white/90 p-5 shadow-[var(--shadow-card)] backdrop-blur",
+        "relative overflow-hidden rounded-[1.85rem] border border-[color:var(--border)] bg-white p-5 shadow-[var(--shadow-card)]",
         className
       )}
     >
+      <div className="absolute inset-x-0 top-0 h-1.5 bg-blue-600" />
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm font-medium text-slate-500">{label}</p>
-          <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{value}</p>
+        <div className="relative">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">{label}</p>
+          <p className="heading-display mt-3 text-[2.15rem] text-slate-950">{value}</p>
         </div>
-        {icon ? <div className="rounded-2xl bg-slate-100 p-3 text-slate-700">{icon}</div> : null}
+        {icon ? (
+          <div className="relative rounded-[1.3rem] bg-blue-50 p-3 text-blue-700 shadow-[0_8px_20px_rgba(37,99,235,0.1)]">
+            {icon}
+          </div>
+        ) : null}
       </div>
-      {description ? <p className="mt-3 text-sm text-slate-500">{description}</p> : null}
+      {description ? <p className="relative mt-3 text-sm leading-6 text-slate-600">{description}</p> : null}
     </article>
   );
 }

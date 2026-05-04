@@ -9,7 +9,13 @@ import { APP_NAME } from "@/utils/constants";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-body",
+  display: "swap"
+});
+
+const interHeading = Inter({
+  subsets: ["latin"],
+  variable: "--font-heading",
   display: "swap"
 });
 
@@ -27,7 +33,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.variable}>
+      <body className={`${inter.variable} ${interHeading.variable}`}>
         <AppShell profile={profile}>{children}</AppShell>
       </body>
     </html>

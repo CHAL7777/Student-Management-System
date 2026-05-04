@@ -75,7 +75,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
                 <h3 className="text-lg font-semibold text-slate-900">Focused student view</h3>
                 <p className="text-sm text-slate-500">
                   Detailed breakdown for{" "}
-                  <Link className="font-semibold text-emerald-700" href={`/students/${selectedReport.summary.student_id}`}>
+                  <Link className="font-semibold text-blue-700" href={`/students/${selectedReport.summary.student_id}`}>
                     {selectedReport.summary.student_name}
                   </Link>
                   .

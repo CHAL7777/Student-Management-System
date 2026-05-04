@@ -9,7 +9,10 @@ interface TeacherFormProps {
 
 export function TeacherForm({ action, subjectOptions, classOptions }: TeacherFormProps) {
   return (
-    <form action={action} className="grid gap-4 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <form
+      action={action}
+      className="grid gap-5 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[var(--shadow-card)]"
+    >
       <div className="grid gap-4 md:grid-cols-2">
         <Input label="Teacher ID" name="teacher_id" placeholder="TCH-101" required />
         <Input label="Full name" name="name" placeholder="Teacher full name" required />
@@ -33,9 +36,9 @@ export function TeacherForm({ action, subjectOptions, classOptions }: TeacherFor
         />
       </div>
 
-      <fieldset className="grid gap-3 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-4">
-        <legend className="px-1 text-sm font-semibold text-slate-700">Assigned classes</legend>
-        <p className="text-sm text-slate-500">
+      <fieldset className="grid gap-3 rounded-[1.7rem] border border-slate-200 bg-slate-50 p-4 shadow-sm">
+        <legend className="px-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-600">Assigned classes</legend>
+        <p className="text-sm leading-6 text-slate-500">
           Select the class groups this teacher is responsible for, such as Grade 11 A or Grade 11
           B.
         </p>
@@ -43,10 +46,10 @@ export function TeacherForm({ action, subjectOptions, classOptions }: TeacherFor
           {classOptions.map((classOption) => (
             <label
               key={classOption.value}
-              className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50/40"
+              className="flex items-start gap-3 rounded-[1.35rem] border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 transition hover:border-blue-200 hover:bg-blue-50/50"
             >
               <input
-                className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                className="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600"
                 name="class_ids"
                 type="checkbox"
                 value={classOption.value}
@@ -57,8 +60,8 @@ export function TeacherForm({ action, subjectOptions, classOptions }: TeacherFor
         </div>
       </fieldset>
 
-      <div className="flex justify-end">
-        <Button type="submit" variant="secondary">
+      <div className="flex justify-end pt-2">
+        <Button type="submit" variant="primary">
           Save teacher
         </Button>
       </div>

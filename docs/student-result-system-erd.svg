@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1480" aria-label="Entity relationship diagram with explicit cardinalities and derived reporting views">
+  <defs>
+    <style>
+      .entity{fill:#fff;stroke:#111;stroke-width:1.7}
+      .head{fill:#ececec;stroke:#111;stroke-width:1.7}
+      .assoc{fill:#fbf7ed;stroke:#111;stroke-width:1.7}
+      .assochead{fill:#efe3c9;stroke:#111;stroke-width:1.7}
+      .view{fill:#f7fbff;stroke:#2f5f85;stroke-width:1.7;stroke-dasharray:8 5}
+      .viewhead{fill:#e8f1f9;stroke:#2f5f85;stroke-width:1.7;stroke-dasharray:8 5}
+      .title{font:700 20px 'Times New Roman', serif}
+      .title-small{font:700 17px 'Times New Roman', serif}
+      .attr{font:14px 'Times New Roman', serif}
+      .meta{font:13px 'Times New Roman', serif}
+      .small{font:13px 'Times New Roman', serif}
+      .line{stroke:#111;stroke-width:1.8;fill:none}
+      .role{stroke:#111;stroke-width:1.8;fill:none;stroke-dasharray:7 5}
+      .dep{stroke:#2f5f85;stroke-width:1.4;fill:none;stroke-dasharray:6 4}
+    </style>
+  </defs>
+
+  <g>
+    <rect class="head" x="40" y="40" width="260" height="36" />
+    <rect class="entity" x="40" y="76" width="260" height="150" />
+    <text class="title" x="56" y="64">SUBJECTS</text>
+    <text class="attr" x="56" y="104">PK subject_id</text>
+    <text class="attr" x="56" y="130">subject_name</text>
+    <text class="meta" x="56" y="156">UNIQUE</text>
+    <text class="attr" x="56" y="182">total_mark</text>
+    <text class="meta" x="56" y="208">created_at</text>
+  </g>
+
+  <g>
+    <rect class="head" x="400" y="40" width="250" height="36" />
+    <rect class="entity" x="400" y="76" width="250" height="150" />
+    <text class="title" x="416" y="64">TEACHERS</text>
+    <text class="attr" x="416" y="104">PK teacher_id</text>
+    <text class="attr" x="416" y="130">name</text>
+    <text class="attr" x="416" y="156">FK subject_id</text>
+    <text class="meta" x="416" y="182">created_at</text>
+  </g>
+
+  <g>
+    <rect class="head" x="760" y="40" width="300" height="36" />
+    <rect class="entity" x="760" y="76" width="300" height="160" />
+    <text class="title" x="776" y="64">CLASSES</text>
+    <text class="attr" x="776" y="104">PK class_id</text>
+    <text class="attr" x="776" y="130">class_name</text>
+    <text class="meta" x="776" y="156">UNIQUE</text>
+    <text class="attr" x="776" y="182">FK homeroom_teacher_id</text>
+    <text class="meta" x="776" y="208">created_at</text>
+  </g>
+
+  <g>
+    <rect class="assochead" x="360" y="310" width="340" height="36" />
+    <rect class="assoc" x="360" y="346" width="340" height="140" />
+    <text class="title-small" x="376" y="334">TEACHER_CLASS_ASSIGNMENTS</text>
+    <text class="attr" x="376" y="374">PK, FK teacher_id</text>
+    <text class="attr" x="376" y="400">PK, FK class_id</text>
+    <text class="meta" x="376" y="426">created_at</text>
+  </g>
+
+  <g>
+    <rect class="head" x="900" y="330" width="320" height="36" />
+    <rect class="entity" x="900" y="366" width="320" height="210" />
+    <text class="title" x="916" y="354">STUDENTS</text>
+    <text class="attr" x="916" y="394">PK student_id</text>
+    <text class="attr" x="916" y="420">name</text>
+    <text class="attr" x="916" y="446">gender</text>
+    <text class="attr" x="916" y="472">grade</text>
+    <text class="attr" x="916" y="498">academic_year</text>
+    <text class="attr" x="916" y="524">semester</text>
+    <text class="attr" x="916" y="550">FK class_id</text>
+  </g>
+
+  <g>
+    <rect class="head" x="70" y="690" width="320" height="36" />
+    <rect class="entity" x="70" y="726" width="320" height="140" />
+    <text class="title" x="86" y="714">MARKS</text>
+    <text class="attr" x="86" y="754">PK, FK student_id</text>
+    <text class="attr" x="86" y="780">PK, FK subject_id</text>
+    <text class="attr" x="86" y="806">mark</text>
+    <text class="meta" x="86" y="832">created_at</text>
+  </g>
+
+  <g>
+    <rect class="head" x="470" y="760" width="380" height="36" />
+    <rect class="entity" x="470" y="796" width="380" height="190" />
+    <text class="title" x="486" y="784">PROFILES</text>
+    <text class="attr" x="486" y="824">PK id</text>
+    <text class="attr" x="486" y="850">full_name</text>
+    <text class="attr" x="486" y="876">login_id UNIQUE</text>
+    <text class="attr" x="486" y="902">role ENUM(admin, teacher, student)</text>
+    <text class="attr" x="486" y="928">FK student_id</text>
+    <text class="attr" x="486" y="954">FK teacher_id</text>
+    <text class="meta" x="486" y="976">profiles_role_link_check</text>
+  </g>
+
+  <g>
+    <rect class="viewhead" x="40" y="1060" width="560" height="36" />
+    <rect class="view" x="40" y="1096" width="560" height="160" />
+    <text class="title" x="56" y="1084">STUDENT_SUBJECT_REPORT</text>
+    <text class="meta" x="56" y="1124">Derived SQL view, not a stored table</text>
+    <text class="attr" x="56" y="1152">Depends on: students, classes, subjects, marks</text>
+    <text class="attr" x="56" y="1178">Grain: one row per student-subject pair</text>
+    <text class="attr" x="56" y="1204">Outputs: mark and computed status</text>
+  </g>
+
+  <g>
+    <rect class="viewhead" x="650" y="1060" width="550" height="36" />
+    <rect class="view" x="650" y="1096" width="550" height="160" />
+    <text class="title" x="666" y="1084">STUDENT_REPORT_SUMMARY</text>
+    <text class="meta" x="666" y="1124">Derived SQL view, not a stored table</text>
+    <text class="attr" x="666" y="1152">Depends on: students, classes, marks</text>
+    <text class="attr" x="666" y="1178">Grain: one row per student</text>
+    <text class="attr" x="666" y="1204">Outputs: total, average, and rank</text>
+  </g>
+
+  <path class="line" d="M300 150 L400 150" />
+  <text class="small" x="250" y="138">0..1</text>
+  <text class="small" x="348" y="138">0..M</text>
+
+  <path class="line" d="M650 176 L760 176" />
+  <text class="small" x="604" y="164">0..1</text>
+  <text class="small" x="706" y="164">0..M</text>
+
+  <path class="line" d="M525 226 L525 310" />
+  <text class="small" x="537" y="254">1</text>
+  <text class="small" x="537" y="298">0..M</text>
+
+  <path class="line" d="M760 196 L720 196 L720 416 L700 416" />
+  <text class="small" x="734" y="184">1</text>
+  <text class="small" x="706" y="404">0..M</text>
+
+  <path class="line" d="M1010 236 L1010 330" />
+  <text class="small" x="1022" y="264">0..1</text>
+  <text class="small" x="1022" y="318">0..M</text>
+
+  <path class="line" d="M170 226 L170 690" />
+  <text class="small" x="182" y="254">1</text>
+  <text class="small" x="182" y="678">0..M</text>
+
+  <path class="line" d="M900 480 L760 480 L760 796 L390 796" />
+  <text class="small" x="882" y="468">1</text>
+  <text class="small" x="398" y="784">0..M</text>
+
+  <path class="role" d="M610 226 L610 760" />
+  <text class="small" x="622" y="254">0..1</text>
+  <text class="small" x="622" y="748">0..1</text>
+
+  <path class="role" d="M900 530 L870 530 L870 890 L850 890" />
+  <text class="small" x="882" y="518">0..1</text>
+  <text class="small" x="858" y="878">0..1</text>
+
+  <path class="dep" d="M170 226 L170 1020 L160 1060" />
+  <path class="dep" d="M230 866 L230 1020 L280 1060" />
+  <path class="dep" d="M910 236 L910 1000 L400 1060" />
+  <path class="dep" d="M1060 576 L1060 980 L520 1060" />
+
+  <path class="dep" d="M300 866 L300 1020 L820 1060" />
+  <path class="dep" d="M930 236 L930 1020 L760 1060" />
+  <path class="dep" d="M1080 576 L1080 1020 L940 1060" />
+
+  <rect class="entity" x="40" y="1290" width="1160" height="140" />
+  <text class="title" x="58" y="1318">LEGEND</text>
+
+  <line class="line" x1="66" y1="1348" x2="136" y2="1348" />
+  <text class="small" x="152" y="1353">Stored-table foreign-key relationship</text>
+
+  <line class="role" x1="430" y1="1348" x2="500" y2="1348" />
+  <text class="small" x="516" y="1353">Optional unique role link</text>
+
+  <line class="dep" x1="820" y1="1348" x2="890" y2="1348" />
+  <text class="small" x="906" y="1353">Derived-view dependency</text>
+
+  <text class="small" x="58" y="1388">End labels show min..max participation for the entity nearest the label. Dashed blue boxes are views, not stored relations.</text>
+</svg>

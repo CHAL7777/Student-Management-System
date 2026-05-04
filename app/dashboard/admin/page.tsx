@@ -17,11 +17,11 @@ export default async function AdminDashboardPage() {
   ]);
 
   const analyticsSeries = [
-    { label: "Students", value: metrics.totalStudents, color: "bg-emerald-500" },
-    { label: "Teachers", value: metrics.totalTeachers, color: "bg-sky-500" },
-    { label: "Subjects", value: metrics.totalSubjects, color: "bg-violet-500" },
-    { label: "Classes", value: metrics.totalClasses, color: "bg-amber-500" },
-    { label: "Marks", value: metrics.totalMarks, color: "bg-rose-500" }
+    { label: "Students", value: metrics.totalStudents, color: "bg-blue-500" },
+    { label: "Teachers", value: metrics.totalTeachers, color: "bg-blue-400" },
+    { label: "Subjects", value: metrics.totalSubjects, color: "bg-blue-300" },
+    { label: "Classes", value: metrics.totalClasses, color: "bg-slate-400" },
+    { label: "Marks", value: metrics.totalMarks, color: "bg-slate-800" }
   ];
 
   const highestMetric = Math.max(...analyticsSeries.map((item) => item.value), 1);
@@ -145,7 +145,7 @@ export default async function AdminDashboardPage() {
           title="Grade distribution chart"
           description="Shows where the registrar currently has the most student concentration."
           data={gradeDistribution}
-          accentClassName="bg-emerald-500"
+          accentClassName="bg-blue-500"
           emptyMessage="No students yet. Add students to generate grade analytics."
         />
         <AnalyticsPanel
@@ -159,7 +159,7 @@ export default async function AdminDashboardPage() {
 
       <Card className="overflow-hidden bg-slate-950 text-white">
         <CardHeader>
-          <p className="text-sm uppercase tracking-[0.3em] text-emerald-300">Access model</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-sky-200">Access model</p>
           <h3 className="text-xl font-semibold text-white">Role permissions overview</h3>
           <p className="text-sm leading-6 text-slate-300">
             Each user role has a focused experience designed to reduce clutter and keep academic
@@ -169,7 +169,7 @@ export default async function AdminDashboardPage() {
         <CardContent>
           <ul className="grid gap-3 md:grid-cols-3">
             <li className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-slate-200">
-              <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
+              <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-sky-200">
                 Registrar
               </span>
               <span className="mt-2 block">
@@ -177,13 +177,13 @@ export default async function AdminDashboardPage() {
               </span>
             </li>
             <li className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-slate-200">
-              <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
+              <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-sky-200">
                 Teacher
               </span>
               <span className="mt-2 block">Enter marks through composite-key upserts.</span>
             </li>
             <li className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-slate-200">
-              <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
+              <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-sky-200">
                 Student
               </span>
               <span className="mt-2 block">Access only their own reports.</span>

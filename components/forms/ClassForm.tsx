@@ -8,7 +8,10 @@ interface ClassFormProps {
 
 export function ClassForm({ action, teacherOptions }: ClassFormProps) {
   return (
-    <form action={action} className="grid gap-4 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <form
+      action={action}
+      className="grid gap-5 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[var(--shadow-card)]"
+    >
       <Input label="Class name" name="class_name" placeholder="Grade 10 - A" required />
 
       <Select
@@ -18,8 +21,8 @@ export function ClassForm({ action, teacherOptions }: ClassFormProps) {
         options={[{ label: "Unassigned", value: "" }, ...teacherOptions]}
       />
 
-      <div className="flex justify-end">
-        <Button type="submit" variant="secondary">
+      <div className="flex justify-end pt-2">
+        <Button type="submit" variant="primary">
           Save class
         </Button>
       </div>

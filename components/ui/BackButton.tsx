@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
+import { ArrowLeftIcon } from "@/components/ui/Icons";
 import { Button } from "@/components/ui/Button";
 
 interface BackButtonProps {
@@ -26,7 +27,8 @@ export function BackButton({
 
   return (
     <Button className="w-fit" onClick={handleBack} type="button" variant="ghost">
-      ← {label}
+      <ArrowLeftIcon className="h-4 w-4" />
+      {label}
     </Button>
   );
 }

@@ -1,5 +1,4 @@
 import { NextResponse, type NextRequest } from "next/server";
-
 import { createMiddlewareSupabase } from "@/lib/supabase";
 import type { UserProfile } from "@/types";
 import { ROLE_HOME } from "@/utils/roles";

@@ -8,19 +8,20 @@ interface FadeInProps {
   className?: string;
 }
 
+const easeOut = [0.22, 1, 0.36, 1] as const;
+
 export function FadeIn({ children, className, delay = 0 }: PropsWithChildren<FadeInProps>) {
   const shouldReduceMotion = useReducedMotion();
 
-  // Respect reduced-motion preferences while keeping entrances subtle for everyone else.
-  const initial = shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 18 };
-  const animate = shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 };
+  const initial = shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 22, scale: 0.985 };
+  const animate = shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 };
 
   return (
     <motion.div
       animate={animate}
       className={className}
       initial={initial}
-      transition={{ duration: 0.38, ease: "easeOut", delay }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.48, ease: easeOut, delay }}
     >
       {children}
     </motion.div>
@@ -39,7 +40,8 @@ export function StaggerGroup({ children, className }: PropsWithChildren<{ classN
         hidden: {},
         show: {
           transition: {
-            staggerChildren: shouldReduceMotion ? 0 : 0.08
+            staggerChildren: shouldReduceMotion ? 0 : 0.1,
+            delayChildren: shouldReduceMotion ? 0 : 0.04
           }
         }
       }}
@@ -56,10 +58,10 @@ export function StaggerItem({ children, className }: PropsWithChildren<{ classNa
     <motion.div
       className={className}
       variants={{
-        hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 16 },
-        show: { opacity: 1, y: 0 }
+        hidden: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 18, scale: shouldReduceMotion ? 1 : 0.985 },
+        show: { opacity: 1, y: 0, scale: 1 }
       }}
-      transition={{ duration: 0.32, ease: "easeOut" }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.42, ease: easeOut }}
     >
       {children}
     </motion.div>

@@ -1,29 +1,20 @@
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
-import { StudentForm } from "@/components/forms/StudentForm";
-import { Alert } from "@/components/ui/Alert";
+import { StudentForm, type StudentFormActionState } from "@/components/forms/StudentForm";
 import { BackButton } from "@/components/ui/BackButton";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { requireRole } from "@/lib/auth";
 import { createStudent, listClasses } from "@/lib/queries";
 import { toOptions } from "@/utils/helpers";
 
-interface AddStudentPageProps {
-  searchParams?: Promise<{
-    error?: string;
-  }>;
-}
-
-export default async function AddStudentPage({ searchParams }: AddStudentPageProps) {
+export default async function AddStudentPage() {
   await requireRole(["admin"]);
-  const [classes, resolvedSearchParams] = await Promise.all([
-    listClasses(),
-    searchParams ?? Promise.resolve({ error: undefined })
-  ]);
-  const params = resolvedSearchParams as { error?: string };
+  const classes = await listClasses();
 
-  async function createStudentAction(formData: FormData) {
+  async function createStudentAction(
+    _state: StudentFormActionState,
+    formData: FormData
+  ): Promise<StudentFormActionState> {
     "use server";
 
     await requireRole(["admin"]);
@@ -41,22 +32,32 @@ export default async function AddStudentPage({ searchParams }: AddStudentPagePro
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to create student";
-      redirect(`/students/add?error=${encodeURIComponent(message)}`);
+      return {
+        status: "error",
+        message,
+        fieldErrors: {}
+      };
     }
 
     revalidatePath("/students");
-    redirect("/students");
+    revalidatePath("/reports");
+    revalidatePath("/dashboard/admin");
+
+    return {
+      status: "success",
+      message: "Student record and login were created successfully.",
+      fieldErrors: {}
+    };
   }
 
   return (
     <section className="grid gap-6">
       <BackButton fallbackHref="/students" label="Back to students" />
       <PageHeader
-        description="Create a new student record, assign the institutional ID, and issue a temporary password."
+        description="Register a student with academic placement, class assignment, and an onboarding-ready access account."
         eyebrow="Student Management"
-        title="Add student"
+        title="Create student profile"
       />
-      {params.error ? <Alert variant="danger">{params.error}</Alert> : null}
       <StudentForm action={createStudentAction} classOptions={toOptions(classes, "class_name", "class_id")} />
     </section>
   );
